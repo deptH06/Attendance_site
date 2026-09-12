@@ -2,45 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AttendFlow — Academic Attendance Portal & Spreadsheet Audit</title>
-  
-  <!-- Fonts: Inter & Plus Jakarta Sans for clean tabular typography -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AttendFlow — Smart Attendance Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-wall-base: #f5f6f9;
-      --bg-wall-linear: #ebeef4;
-      --bg-card: #ffffff;
-      --border-subtle: #dbe0ea;
-      --border-focus: #3b82f6;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
+      --sand-bg: #f5eedf;
+      --paper-card: #ffffff;
+      --border-subtle: #e8ded1;
+      --text-main: #1d1815;
+      --text-muted: #736960;
       
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
-      --primary-soft: #eff6ff;
-
       --danger: #dc2626;
-      --danger-bg: #fff1f2;
-      --danger-border: #fecdd3;
-      --danger-text: #991b1b;
-
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
       --success: #16a34a;
       --success-bg: #f0fdf4;
-      --success-border: #bbf7d0;
-
-      --excel-green: #107c41;
-      --excel-green-hover: #0e6837;
-      --excel-header-bg: #f3f6f4;
-      --excel-border: #d0d7de;
-      
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
+      --success-border: #86efac;
+      --radius: 12px;
+      --bottom-nav-height: 64px;
     }
 
     * {
@@ -51,78 +36,18 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Architectural textured backdrop resembling classroom wall panels */
     body {
-      background-color: var(--bg-wall-base);
+      background-color: var(--sand-bg);
       background-image: 
-        linear-gradient(90deg, rgba(219, 224, 234, 0.45) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(219, 224, 234, 0.45) 1px, transparent 1px),
-        radial-gradient(circle at 15% 15%, #ffffff 0%, transparent 60%),
-        radial-gradient(circle at 85% 85%, rgba(226, 232, 240, 0.6) 0%, transparent 70%);
-      background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+        linear-gradient(rgba(29, 24, 21, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 24, 21, 0.035) 1px, transparent 1px);
+      background-size: 30px 30px;
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .btn {
-      padding: 9px 16px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      border-radius: var(--radius-sm);
-      border: 1px solid transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      transition: all 0.18s ease;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary {
-      background: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-    }
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-    .btn-outline {
-      background: #ffffff;
-      border-color: var(--border-subtle);
-      color: var(--text-main);
-    }
-    .btn-outline:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-    }
-    .btn-excel {
-      background: var(--excel-green);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(16, 124, 65, 0.25);
-    }
-    .btn-excel:hover {
-      background: var(--excel-green-hover);
-    }
-    .btn-danger-outline {
-      background: #ffffff;
-      border: 1px solid var(--danger-border);
-      color: var(--danger);
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-danger-outline:hover {
-      background: var(--danger);
-      color: #ffffff;
-    }
-    .btn-block { width: 100%; }
-
-    /* Screen toggles */
     .screen {
       display: none;
       width: 100%;
@@ -133,312 +58,563 @@
       flex-direction: column;
     }
 
+    /* Buttons */
+    .btn {
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-outline {
+      background-color: #ffffff;
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background-color: #faf5ed;
+    }
+    .btn-danger-outline {
+      background-color: #ffffff;
+      border-color: var(--danger-border);
+      color: var(--danger);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-danger-outline:hover {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+    .btn-block { width: 100%; }
+
+    /* =========================================================
+       1. AUTHENTICATION SECTION
+    ========================================================= */
     #auth-screen {
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 20px;
     }
     .auth-card {
-      background: #ffffff;
+      background: var(--paper-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
+      border-radius: 16px;
       width: 100%;
-      max-width: 440px;
-      padding: 36px 32px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
+      max-width: 420px;
+      padding: 30px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     }
     .auth-header {
       text-align: center;
-      margin-bottom: 24px;
-    }
-    .brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 800;
-      color: var(--primary);
-      background: var(--primary-soft);
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 12px;
+      margin-bottom: 22px;
     }
     .auth-header h2 {
-      font-size: 1.75rem;
-      font-weight: 800;
+      font-family: 'Newsreader', serif;
+      font-size: 2.1rem;
+      font-weight: 600;
       letter-spacing: -0.5px;
-      color: #0f172a;
     }
     .auth-header p {
       color: var(--text-muted);
       font-size: 0.88rem;
       margin-top: 4px;
     }
-
-    .role-toggle-bar {
+    .role-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: #f1f5f9;
-      border-radius: var(--radius-sm);
+      background: #eee6d8;
+      border-radius: var(--radius);
       padding: 4px;
       margin-bottom: 20px;
-      gap: 4px;
     }
-    .role-toggle-btn {
-      padding: 9px 12px;
+    .role-btn {
+      padding: 8px 10px;
       font-size: 0.85rem;
       font-weight: 600;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.15s;
     }
-    .role-toggle-btn.active {
+    .role-btn.active {
       background: #ffffff;
       color: var(--primary);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
-    .form-group {
-      margin-bottom: 16px;
+    .input-field {
+      margin-bottom: 15px;
       display: flex;
       flex-direction: column;
     }
-    .form-group label {
+    .input-field label {
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-main);
       margin-bottom: 6px;
     }
-    .form-group input, .form-group select {
+    .input-field input, .input-field select {
       border: 1px solid var(--border-subtle);
-      background: #fcfdfe;
       padding: 11px 13px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius);
       outline: none;
-      font-size: 0.9rem;
-      color: var(--text-main);
-      transition: all 0.15s ease;
-    }
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--border-focus);
+      font-size: 0.92rem;
       background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
-    .auth-switch-note {
+    .input-field input:focus, .input-field select:focus {
+      border-color: var(--primary);
+    }
+    .auth-toggle-note {
       text-align: center;
-      margin-top: 18px;
+      margin-top: 16px;
       font-size: 0.85rem;
       color: var(--text-muted);
     }
-    .auth-switch-note a {
+    .auth-toggle-note a {
       color: var(--primary);
       text-decoration: none;
       font-weight: 600;
     }
 
-    .top-navbar {
-      background: #ffffff;
+    /* =========================================================
+       2. NAVIGATION ARCHITECTURE (Responsive)
+    ========================================================= */
+    .top-nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 14px 32px;
+      padding: 10px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
-      z-index: 90;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
-    }
-    .brand-badge-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      z-index: 100;
     }
     .brand-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.4px;
+      font-family: 'Newsreader', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .brand-title span { color: var(--primary); }
-    .role-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 3px 9px;
-      border-radius: 20px;
+    .brand-title span {
+      font-family: inherit;
+      color: var(--primary);
+      font-style: italic;
+    }
+    .brand-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 6px;
       background: #eff6ff;
       color: var(--primary);
-      border: 1px solid #bfdbfe;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
     }
-
-    .nav-tabs-bar {
+    
+    /* Desktop Tab Bar */
+    .nav-tabs-desktop {
       display: flex;
-      gap: 4px;
-      background: #f1f5f9;
+      gap: 6px;
+      background: #eee6d8;
       padding: 4px;
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
     }
-    .nav-tab-btn {
-      padding: 7px 16px;
-      border-radius: 6px;
+    .tab-item-desktop {
+      padding: 7px 14px;
+      border-radius: 7px;
       border: none;
       background: transparent;
-      font-size: 0.86rem;
       font-weight: 600;
+      font-size: 0.85rem;
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.15s;
     }
-    .nav-tab-btn.active {
+    .tab-item-desktop.active {
       background: #ffffff;
       color: var(--primary);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
-
-    .user-profile-meta {
+    .nav-user {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      font-size: 0.85rem;
     }
-    .user-name-display {
-      font-size: 0.86rem;
-      font-weight: 700;
+    .user-pill {
+      font-weight: 600;
       color: var(--text-main);
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .main-container {
-      max-width: 1060px;
+    /* Mobile Bottom Navigation Bar */
+    .mobile-bottom-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--bottom-nav-height);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-subtle);
+      z-index: 200;
+      padding: 4px 12px;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    }
+    .mobile-tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 6px 0;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color 0.15s;
+    }
+    .mobile-tab-btn .tab-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+    .mobile-tab-btn.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Page Canvas */
+    .page-container {
+      max-width: 980px;
       width: 100%;
-      margin: 24px auto;
-      padding: 0 20px 60px;
+      margin: 16px auto;
+      padding: 0 16px;
       flex: 1;
     }
-    .tab-section {
+    .tab-panel {
       display: none;
     }
-    .tab-section.active {
+    .tab-panel.active {
       display: block;
     }
 
-    .date-scroller-panel {
-      background: #ffffff;
+    /* =========================================================
+       3. HORIZONTAL DATE SCROLLER
+    ========================================================= */
+    .date-scroller-box {
+      background: var(--paper-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
     }
     .date-scroller-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .scroller-title-wrap {
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .scroller-title-wrap h3 {
-      font-size: 1.05rem;
+    .header-left h4 {
+      font-size: 0.95rem;
       font-weight: 700;
     }
-    .month-cal-btn {
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
+    .cal-icon-btn {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
       color: var(--primary);
       border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
+      padding: 4px 8px;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
-    .month-cal-btn:hover {
-      background: #eff6ff;
-      border-color: #93c5fd;
-    }
-    .active-date-badge {
-      font-size: 0.85rem;
+    .selected-badge {
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--primary);
       background: #eff6ff;
-      padding: 4px 12px;
+      padding: 4px 8px;
       border-radius: 6px;
-      border: 1px solid #bfdbfe;
     }
-
     .scroller-track {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 6px;
       scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
-    .scroller-track::-webkit-scrollbar {
-      height: 6px;
-    }
+    .scroller-track::-webkit-scrollbar { height: 4px; }
     .scroller-track::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+      background: #d8cebf;
       border-radius: 4px;
     }
-    .day-pill {
-      min-width: 66px;
-      padding: 10px 8px;
-      background: #f8fafc;
+    .date-card {
+      min-width: 62px;
+      padding: 8px 6px;
+      background: #fbf8f3;
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
       user-select: none;
+      flex-shrink: 0;
       transition: all 0.15s ease;
     }
-    .day-pill:hover {
-      border-color: #94a3b8;
-      background: #ffffff;
-    }
-    .day-pill .pill-day {
-      font-size: 0.7rem;
+    .date-card .day-name {
+      font-size: 0.68rem;
       text-transform: uppercase;
       font-weight: 700;
       color: var(--text-muted);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    .day-pill .pill-date {
+    .date-card .day-num {
       font-size: 1.15rem;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text-main);
+      line-height: 1.2;
     }
-    .day-pill .pill-month {
-      font-size: 0.7rem;
+    .date-card .month-label {
+      font-size: 0.68rem;
       color: var(--text-muted);
     }
-    .day-pill.active {
+    .date-card.active {
       background: var(--primary);
       border-color: var(--primary);
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
     }
-    .day-pill.active .pill-day,
-    .day-pill.active .pill-date,
-    .day-pill.active .pill-month {
+    .date-card.active .day-name,
+    .date-card.active .day-num,
+    .date-card.active .month-label {
       color: #ffffff;
     }
 
-    /* Month-Only Modal */
+    /* =========================================================
+       4. SUBJECT CARDS & SEGREGATION (Full-width Mobile)
+    ========================================================= */
+    .subjects-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    .subject-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Subject Color Borders */
+    .card-fmi  { border-left: 5px solid #2563eb; }
+    .card-dpos { border-left: 5px solid #4f46e5; }
+    .card-ppwc { border-left: 5px solid #9333ea; }
+    .card-itc  { border-left: 5px solid #0d9488; }
+    .card-ips  { border-left: 5px solid #d97706; }
+    .card-mlc  { border-left: 5px solid #e11d48; }
+    .card-cn   { border-left: 5px solid #0284c7; }
+
+    .subject-card.danger-card {
+      border: 1.5px solid var(--danger-border);
+      border-left: 6px solid var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    .subject-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .subject-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .subject-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: #ffffff;
+      width: fit-content;
+    }
+    .badge-fmi  { background-color: #2563eb; }
+    .badge-dpos { background-color: #4f46e5; }
+    .badge-ppwc { background-color: #9333ea; }
+    .badge-itc  { background-color: #0d9488; }
+    .badge-ips  { background-color: #d97706; }
+    .badge-mlc  { background-color: #e11d48; }
+    .badge-cn   { background-color: #0284c7; }
+
+    .subject-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .criteria-alert {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--danger);
+      background: #fee2e2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-top: 2px;
+    }
+
+    .pct-box {
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success-border);
+      flex-shrink: 0;
+    }
+    .pct-box.danger {
+      background: #fee2e2;
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
+
+    .subject-mid-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+    .stat-val { font-weight: 700; color: var(--text-main); }
+    .needed-stat { color: var(--danger); font-weight: 700; }
+
+    .attendance-buttons {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+    .att-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+    }
+    .att-btn:hover { background: #faf5ed; }
+    .att-btn.active-p { background: var(--success); color: #ffffff; border-color: var(--success); }
+    .att-btn.active-a { background: var(--danger); color: #ffffff; border-color: var(--danger); }
+    .att-btn.active-h { background: #64748b; color: #ffffff; border-color: #64748b; }
+
+    /* =========================================================
+       5. TEACHER DASHBOARD & CARDS
+    ========================================================= */
+    .teacher-card, .panel-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+    .teacher-subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .table-responsive-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.86rem;
+      min-width: 580px;
+    }
+    .roster-table th, .roster-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .roster-table th {
+      background: #fbf8f3;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    /* Modal */
     .month-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(3px);
+      background: rgba(29, 24, 21, 0.5);
       display: none;
       align-items: center;
       justify-content: center;
@@ -448,452 +624,141 @@
     .month-modal-backdrop.show { display: flex; }
     .month-modal-card {
       background: #ffffff;
+      border-radius: 14px;
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 360px;
-      padding: 22px;
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.15);
+      max-width: 340px;
+      padding: 18px;
     }
     .month-modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
-    .year-nav {
+    .year-stepper {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 1.05rem;
       font-weight: 700;
+      font-size: 1rem;
     }
-    .year-arrow-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
+    .step-btn {
+      background: #eee6d8;
       border: 1px solid var(--border-subtle);
-      background: #f8fafc;
-      cursor: pointer;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       font-weight: 700;
     }
-    .year-arrow-btn:hover { background: #e2e8f0; }
-    .modal-close-x {
+    .close-btn {
       background: transparent;
       border: none;
-      font-size: 1.4rem;
-      color: var(--text-muted);
+      font-size: 1.3rem;
       cursor: pointer;
+      color: var(--text-muted);
     }
     .months-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
+      gap: 8px;
     }
     .month-tile {
-      padding: 12px 6px;
+      padding: 10px 6px;
       text-align: center;
-      background: #f8fafc;
       border: 1px solid var(--border-subtle);
+      background: #fbf8f3;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.15s;
     }
-    .month-tile:hover {
-      background: #e2e8f0;
-      border-color: #94a3b8;
-    }
-    .month-tile.selected {
+    .month-tile.current-selected {
       background: var(--primary);
       color: #ffffff;
       border-color: var(--primary);
     }
 
-    .subjects-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .subject-card {
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.02);
-      transition: all 0.18s;
-    }
-    .subject-card:hover {
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-    }
-
-    /* Subject Color Segregation (FMI, DPOS, PPWC, ITC, IPS, MLC, CN) */
-    .accent-fmi  { border-left: 6px solid #2563eb; } /* Royal Blue */
-    .accent-dpos { border-left: 6px solid #4f46e5; } /* Indigo */
-    .accent-ppwc { border-left: 6px solid #7c3aed; } /* Purple */
-    .accent-itc  { border-left: 6px solid #0d9488; } /* Teal */
-    .accent-ips  { border-left: 6px solid #ea580c; } /* Amber-Orange */
-    .accent-mlc  { border-left: 6px solid #e11d48; } /* Rose */
-    .accent-cn   { border-left: 6px solid #0284c7; } /* Cyan-Blue */
-
-    /* < 75% Breach Highlight */
-    .subject-card.danger-highlight {
-      background: var(--danger-bg);
-      border: 1.5px solid var(--danger-border);
-      border-left: 7px solid var(--danger) !important;
-      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.08);
-    }
-
-    .subject-head-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .subject-label-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .subject-tag {
-      font-size: 0.76rem;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 6px;
-      color: #ffffff;
-      letter-spacing: 0.4px;
-    }
-    .tag-fmi  { background: #2563eb; }
-    .tag-dpos { background: #4f46e5; }
-    .tag-ppwc { background: #7c3aed; }
-    .tag-itc  { background: #0d9488; }
-    .tag-ips  { background: #ea580c; }
-    .tag-mlc  { background: #e11d48; }
-    .tag-cn   { background: #0284c7; }
-
-    .subject-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-    .breach-pill {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--danger-text);
-      background: #fee2e2;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid #fca5a5;
-    }
-    .pct-box-display {
-      font-size: 1.15rem;
-      font-weight: 800;
-      padding: 4px 14px;
-      border-radius: 20px;
-      background: var(--success-bg);
-      color: var(--success);
-      border: 1px solid var(--success-border);
-    }
-    .pct-box-display.danger {
-      background: #fee2e2;
-      color: var(--danger);
-      border-color: var(--danger-border);
-    }
-
-    .progress-bar-rail {
-      width: 100%;
-      height: 6px;
-      background: #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #2563eb, #38bdf8);
-      transition: width 0.3s ease;
-      border-radius: 10px;
-    }
-    .subject-card.danger-highlight .progress-bar-fill {
-      background: linear-gradient(90deg, #f87171, #dc2626);
-    }
-
-    .subject-meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .stat-text strong { color: var(--text-main); }
-    .needed-warning {
-      color: var(--danger);
-      font-weight: 700;
-    }
-
-    .attendance-status-group {
-      display: flex;
-      gap: 6px;
-    }
-    .status-btn {
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: 1px solid var(--border-subtle);
-      background: #ffffff;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .status-btn:hover { background: #f8fafc; }
-    .status-btn.active-p {
-      background: var(--success);
-      color: #ffffff;
-      border-color: var(--success);
-    }
-    .status-btn.active-a {
-      background: var(--danger);
-      color: #ffffff;
-      border-color: var(--danger);
-    }
-    .status-btn.active-h {
-      background: #64748b;
-      color: #ffffff;
-      border-color: #64748b;
-    }
-
-    .teacher-panel-card {
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-    }
-    .teacher-top-action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 20px;
-    }
-    .teacher-info h3 {
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-    .teacher-info p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-    }
-    .roster-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    .roster-table th, .roster-table td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-subtle);
-      vertical-align: middle;
-    }
-    .roster-table th {
-      background: #f8fafc;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-    .roster-table tr:hover td {
-      background: #fbfcfe;
-    }
-
-    .excel-modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1050;
-      padding: 20px;
-    }
-    .excel-modal-backdrop.show { display: flex; }
-    .excel-modal-sheet {
-      background: #ffffff;
-      border: 1px solid #c7d2fe;
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 1100px;
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
-    }
-    .excel-sheet-toolbar {
-      background: #107c41;
-      color: #ffffff;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .excel-sheet-toolbar h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .excel-toolbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .excel-subbar {
-      background: #f3f4f6;
-      border-bottom: 1px solid var(--excel-border);
-      padding: 8px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-    }
-    .excel-search-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      border-radius: 4px;
-      padding: 4px 8px;
-    }
-    .excel-search-box input {
-      border: none;
-      outline: none;
-      font-size: 0.82rem;
-      width: 180px;
-    }
-
-    .spreadsheet-scroll-area {
-      flex: 1;
-      overflow: auto;
-      background: #ffffff;
-    }
-    .spreadsheet-table {
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 0.82rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .spreadsheet-table th, .spreadsheet-table td {
-      border: 1px solid var(--excel-border);
-      padding: 8px 10px;
-      white-space: nowrap;
-    }
-    .spreadsheet-table th {
-      background: var(--excel-header-bg);
-      font-weight: 700;
-      color: #334155;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .spreadsheet-table td.row-num-col {
-      background: #f8fafc;
-      color: #94a3b8;
-      text-align: center;
-      font-weight: 600;
-      width: 40px;
-    }
-    .spreadsheet-table td.center { text-align: center; }
-    .cell-present { color: #15803d; font-weight: 700; background: #f0fdf4; }
-    .cell-absent  { color: #b91c1c; font-weight: 700; background: #fef2f2; }
-    .cell-holiday { color: #64748b; font-weight: 600; background: #f8fafc; }
-    .cell-safe    { color: #15803d; font-weight: 700; }
-    .cell-danger  { color: #dc2626; font-weight: 700; background: #fee2e2; }
-
-    .generic-card {
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
-    }
-    .camera-box-stream {
+    /* Camera Element */
+    .camera-feed-box {
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      background: #f8fafc;
-      padding: 16px;
-      border-radius: var(--radius-sm);
+      gap: 10px;
+      margin-bottom: 16px;
+      background: #fbf8f3;
+      padding: 14px;
+      border-radius: var(--radius);
       border: 1px dashed var(--border-subtle);
     }
-    #camera-video-elem {
+    #camera-feed {
       max-width: 100%;
-      width: 460px;
+      width: 100%;
       border-radius: 8px;
     }
-    .calc-box-wrap {
-      max-width: 520px;
-      margin: 0 auto;
-    }
-    .calc-out-card {
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      line-height: 1.5;
+
+    /* =========================================================
+       MOBILE-SPECIFIC OVERRIDES (<= 768px)
+    ========================================================= */
+    @media (max-width: 768px) {
+      /* Hide desktop top tab strip */
+      .nav-tabs-desktop {
+        display: none !important;
+      }
+      /* Show native bottom bar for students */
+      .mobile-bottom-bar.show-mobile-bar {
+        display: flex;
+      }
+      /* Avoid overlap with floating bottom bar */
+      .page-container {
+        padding-bottom: 85px;
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-top: 10px;
+      }
+      .top-nav {
+        padding: 8px 12px;
+      }
+      .brand-title {
+        font-size: 1.3rem;
+      }
+      .user-pill {
+        display: none; /* Hide long name on mobile top-bar to keep sign out clean */
+      }
+      .subject-card {
+        padding: 12px 14px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- AUTHENTICATION SCREEN -->
   <section id="auth-screen" class="screen active">
     <div class="auth-card">
       <div class="auth-header">
-        <div class="brand-pill">⚡ Academic Attendance Portal</div>
-        <h2>AttendFlow</h2>
-        <p id="auth-subtitle-desc">Sign in with your verified Gmail credentials</p>
+        <h2>Attend<span>Flow</span></h2>
+        <p id="auth-subtitle">Sign in to your academic portal</p>
       </div>
 
-      <!-- Student vs Teacher Role Switcher -->
-      <div class="role-toggle-bar">
-        <button type="button" class="role-toggle-btn active" id="btn-role-student" onclick="setAuthRole('student')">Student Portal</button>
-        <button type="button" class="role-toggle-btn" id="btn-role-teacher" onclick="setAuthRole('teacher')">Teacher Portal</button>
+      <div class="role-switcher">
+        <button type="button" class="role-btn active" id="role-btn-student" onclick="setRole('student')">Student Portal</button>
+        <button type="button" class="role-btn" id="role-btn-teacher" onclick="setRole('teacher')">Teacher Portal</button>
       </div>
 
-      <form id="auth-submit-form">
-        <div class="form-group" id="group-user-name" style="display: none;">
-          <label for="input-user-name">Full Name</label>
-          <input type="text" id="input-user-name" placeholder="John Doe" autocomplete="name" />
+      <form id="auth-form">
+        <div class="input-field" id="name-input-group" style="display: none;">
+          <label for="user-name">Full Name</label>
+          <input type="text" id="user-name" placeholder="John Doe" autocomplete="name" />
         </div>
 
-        <!-- Teacher's Assigned Teaching Subject Selector -->
-        <div class="form-group" id="group-teacher-subject" style="display: none;">
-          <label for="select-teacher-subject">Assigned Teaching Subject</label>
-          <select id="select-teacher-subject">
+        <div class="input-field" id="teacher-subject-group" style="display: none;">
+          <label for="teacher-subject-select">Assigned Teaching Subject</label>
+          <select id="teacher-subject-select">
             <option value="sub_fmi">FMI — Fundamental of Management & Information</option>
             <option value="sub_dpos">DPOS — Design and Principles of Operating Systems</option>
             <option value="sub_ppwc">PPWC — Programming Practices with C</option>
@@ -904,679 +769,643 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="input-user-email">Gmail Address</label>
-          <input type="email" id="input-user-email" placeholder="student@gmail.com" required autocomplete="email" />
+        <div class="input-field">
+          <label for="user-email">Gmail Address</label>
+          <input type="email" id="user-email" placeholder="student@gmail.com" required autocomplete="email" />
         </div>
 
-        <div class="form-group">
-          <label for="input-user-pass">Password</label>
-          <input type="password" id="input-user-pass" placeholder="••••••••" required autocomplete="current-password" />
+        <div class="input-field">
+          <label for="user-password">Password</label>
+          <input type="password" id="user-password" placeholder="••••••••" required autocomplete="current-password" />
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block" id="btn-auth-submit">Sign In as Student</button>
+        <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Sign In as Student</button>
       </form>
 
-      <div class="auth-switch-note">
-        <span id="auth-mode-prompt">Don't have an account?</span>
-        <a href="#" id="auth-mode-toggler" onclick="toggleAuthMode(event)">Create an account</a>
+      <div class="auth-toggle-note">
+        <span id="auth-mode-label">Don't have an account?</span>
+        <a href="#" id="auth-mode-link" onclick="toggleAuthMode(event)">Create an account</a>
       </div>
     </div>
   </section>
 
-  <section id="portal-screen" class="screen">
-    <header class="top-navbar">
-      <div class="brand-badge-group">
-        <span class="brand-title">Attend<span>Flow</span></span>
-        <span class="role-badge" id="display-role-badge">Student</span>
+  <!-- MAIN APPLICATION DASHBOARD -->
+  <section id="main-screen" class="screen">
+    
+    <!-- Top Horizontal Navigation -->
+    <header class="top-nav">
+      <div class="brand-title">
+        Attend<span>Flow</span>
+        <span class="brand-tag" id="current-role-badge">Student</span>
       </div>
 
-      <!-- Student Navigation Tabs -->
-      <nav class="nav-tabs-bar" id="student-tabs-nav">
-        <button class="nav-tab-btn active" onclick="activateTab('attendance-section')">Attendance</button>
-        <button class="nav-tab-btn" onclick="activateTab('timetable-section')">Timetable</button>
-        <button class="nav-tab-btn" onclick="activateTab('calculator-section')">Calculator</button>
+      <!-- Desktop View Tabs -->
+      <nav class="nav-tabs-desktop" id="student-desktop-tabs">
+        <button class="tab-item-desktop active" onclick="switchTab('attendance-tab')">Attendance</button>
+        <button class="tab-item-desktop" onclick="switchTab('timetable-tab')">Timetable</button>
+        <button class="tab-item-desktop" onclick="switchTab('calc-tab')">Calculator</button>
       </nav>
 
-      <!-- Teacher Navigation Tab -->
-      <nav class="nav-tabs-bar" id="teacher-tabs-nav" style="display: none;">
-        <button class="nav-tab-btn active" onclick="activateTab('teacher-section')">Subject Roster & Audit</button>
-      </nav>
-
-      <div class="user-profile-meta">
-        <span class="user-name-display" id="display-user-greeting">Welcome, User</span>
-        <button class="btn btn-outline" style="padding: 5px 11px; font-size: 0.8rem;" onclick="logoutSession()">Sign Out</button>
+      <div class="nav-user">
+        <span class="user-pill" id="user-display-name">Student</span>
+        <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.78rem;" onclick="logout()">Sign Out</button>
       </div>
     </header>
 
-    <div class="main-container">
+    <!-- Content Workspace -->
+    <div class="page-container">
 
-      <section id="attendance-section" class="tab-section active">
-        <!-- Date Scroller Box with Calendar Icon -->
-        <div class="date-scroller-panel">
+      <!-- 1. ATTENDANCE VIEW -->
+      <div id="attendance-tab" class="tab-panel active">
+        <div class="date-scroller-box">
           <div class="date-scroller-header">
-            <div class="scroller-title-wrap">
-              <h3>Select Date to Track</h3>
-              <button type="button" class="month-cal-btn" onclick="openMonthPickerModal()" title="Choose Month">
-                📅 <span id="month-btn-label">Month</span>
+            <div class="header-left">
+              <h4>Select Date to Track</h4>
+              <button type="button" class="cal-icon-btn" onclick="openMonthPicker()" title="Select Month">
+                📅 <span id="cal-month-badge">Month</span>
               </button>
             </div>
-            <span class="active-date-badge" id="active-date-display">Today</span>
+            <span class="selected-badge" id="selected-date-label">Today</span>
           </div>
 
-          <div class="scroller-track" id="days-scroller-track"></div>
+          <div class="scroller-track" id="date-scroller-track"></div>
         </div>
 
-        <!-- 7 Default Subjects Stack -->
-        <div class="subjects-stack" id="subjects-stack-list"></div>
-      </section>
+        <!-- Stack of 7 default subjects -->
+        <div class="subjects-stack" id="student-subjects-stack"></div>
+      </div>
 
-      <section id="timetable-section" class="tab-section">
-        <div class="generic-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+      <!-- 2. TIMETABLE VIEW -->
+      <div id="timetable-tab" class="tab-panel">
+        <div class="panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
             <div>
-              <h3 style="font-size: 1.2rem; font-weight: 700;">Weekly Class Timetable</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted);">Snap a photo using your camera or enter lecture slots manually.</p>
+              <h3 style="font-size: 1.1rem;">Class Timetable</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Snap photo with camera or enter slots manually.</p>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button class="btn btn-primary" onclick="initCameraStream()">📷 Scan Timetable</button>
-              <button class="btn btn-outline" onclick="promptManualTimetable()">✍️ Add Entry</button>
+              <button class="btn btn-primary" style="font-size: 0.8rem; padding: 6px 12px;" onclick="startCamera()">📷 Camera</button>
+              <button class="btn btn-outline" style="font-size: 0.8rem; padding: 6px 12px;" onclick="addManualTimetableEntry()">✍️ Add</button>
             </div>
           </div>
 
-          <!-- Camera Stream Container -->
-          <div class="camera-box-stream" id="camera-stream-box">
-            <video id="camera-video-elem" autoplay playsinline></video>
-            <canvas id="camera-canvas-elem" style="display: none;"></canvas>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn btn-primary" onclick="snapTimetablePhoto()">Take Picture</button>
-              <button class="btn btn-outline" onclick="closeCameraStream()">Close Camera</button>
+          <div class="camera-feed-box" id="camera-box">
+            <video id="camera-feed" autoplay playsinline></video>
+            <canvas id="camera-canvas" style="display: none;"></canvas>
+            <div>
+              <button class="btn btn-primary" onclick="captureCamera()">Snap Picture</button>
+              <button class="btn btn-outline" onclick="stopCamera()">Cancel</button>
             </div>
           </div>
 
-          <!-- Timetable Image Photo Preview -->
-          <div id="timetable-photo-box" style="display: none; margin-bottom: 20px;">
-            <h4 style="font-size: 0.9rem; margin-bottom: 6px;">Saved Timetable Picture:</h4>
-            <img id="timetable-photo-preview" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border-subtle);" alt="Timetable preview" />
+          <div id="tt-img-container" style="display: none; margin-bottom: 14px;">
+            <img id="tt-img-preview" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border-subtle);" />
             <br />
             <button class="btn btn-outline" style="margin-top: 8px; font-size: 0.78rem;" onclick="clearTimetablePhoto()">Remove Photo</button>
           </div>
 
-          <!-- Schedule Table -->
-          <div class="table-container">
+          <div class="table-responsive-wrapper">
             <table class="roster-table">
               <thead>
                 <tr>
                   <th>Day</th>
                   <th>Time Slot</th>
                   <th>Subject</th>
-                  <th>Room / Lab</th>
+                  <th>Room</th>
                 </tr>
               </thead>
-              <tbody id="timetable-table-body"></tbody>
+              <tbody id="timetable-body"></tbody>
             </table>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section id="calculator-section" class="tab-section">
-        <div class="generic-card calc-box-wrap">
-          <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 4px;">75% Attendance Simulator</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
-            Calculate exactly how many upcoming consecutive lectures you must attend to satisfy or recover the 75% criteria.
+      <!-- 3. ATTENDANCE CALCULATOR VIEW -->
+      <div id="calc-tab" class="tab-panel">
+        <div class="panel-card" style="max-width: 480px; margin: 0 auto;">
+          <h3 style="margin-bottom: 4px;">75% Criteria Calculator</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+            Forecast your upcoming classes needed to reach eligibility.
           </p>
 
-          <div class="form-group">
-            <label for="calc-attended-classes">Attended Classes</label>
-            <input type="number" id="calc-attended-classes" min="0" placeholder="e.g. 14" />
+          <div class="input-field">
+            <label>Classes Attended</label>
+            <input type="number" id="calc-in-attended" min="0" placeholder="e.g. 14" />
           </div>
-          <div class="form-group">
-            <label for="calc-total-classes">Total Classes Held</label>
-            <input type="number" id="calc-total-classes" min="1" placeholder="e.g. 24" />
+          <div class="input-field">
+            <label>Total Classes Held</label>
+            <input type="number" id="calc-in-total" min="1" placeholder="e.g. 22" />
           </div>
-          <button class="btn btn-primary btn-block" onclick="computeAttendanceStrategy()">Calculate Needed Classes</button>
+          <button class="btn btn-primary btn-block" onclick="runCalculator()">Calculate Requirement</button>
 
-          <div id="calc-result-box" class="calc-out-card" style="display: none;"></div>
+          <div id="calc-result" style="display: none; margin-top: 16px; padding: 12px; border-radius: var(--radius); font-size: 0.88rem; line-height: 1.5;"></div>
         </div>
-      </section>
+      </div>
 
-      <section id="teacher-section" class="tab-section">
-        <div class="teacher-panel-card">
-          <div class="teacher-top-action-bar">
-            <div class="teacher-info">
+      <!-- 4. TEACHER SUBJECT PORTAL -->
+      <div id="teacher-view-tab" class="tab-panel">
+        <div class="teacher-card">
+          <div class="teacher-subject-header">
+            <div>
               <h3>Subject Attendance Directory</h3>
-              <p>Restricted access: Viewing enrolled students strictly for your assigned subject.</p>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                Restricted access: Viewing attendance for enrolled students exclusively in your subject.
+              </p>
             </div>
-            
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span id="teacher-assigned-badge" class="subject-tag tag-fmi" style="padding: 6px 14px; font-size: 0.85rem;">
-                Subject
-              </span>
-              <!-- Excel Sheet Button -->
-              <button class="btn btn-excel" onclick="openExcelSpreadsheetModal()">
-                📊 Excel Sheet View
-              </button>
+            <div id="teacher-subject-pill" class="subject-badge badge-fmi" style="font-size: 0.82rem; padding: 4px 10px;">
+              FMI
             </div>
           </div>
 
-          <div class="table-container">
+          <div class="table-responsive-wrapper">
             <table class="roster-table">
               <thead>
                 <tr>
                   <th>Student Name</th>
                   <th>Gmail Address</th>
-                  <th>Attended / Held</th>
+                  <th>Attended / Total</th>
                   <th>Attendance %</th>
                   <th>75% Eligibility Status</th>
-                  <th style="text-align: center;">Teacher Action</th>
+                  <th style="text-align: center;">Action</th>
                 </tr>
               </thead>
               <tbody id="teacher-roster-body"></tbody>
             </table>
           </div>
         </div>
-      </section>
+      </div>
 
     </div>
+
+    <!-- Mobile Bottom App Bar (visible on phone screens for students) -->
+    <nav class="mobile-bottom-bar" id="student-mobile-bar">
+      <button class="mobile-tab-btn active" data-target="attendance-tab" onclick="switchTab('attendance-tab')">
+        <span class="tab-icon">📅</span>
+        <span>Attendance</span>
+      </button>
+      <button class="mobile-tab-btn" data-target="timetable-tab" onclick="switchTab('timetable-tab')">
+        <span class="tab-icon">🕒</span>
+        <span>Timetable</span>
+      </button>
+      <button class="mobile-tab-btn" data-target="calc-tab" onclick="switchTab('calc-tab')">
+        <span class="tab-icon">🧮</span>
+        <span>Calculator</span>
+      </button>
+    </nav>
   </section>
 
+  <!-- MONTH-ONLY SELECTION MODAL -->
   <div id="month-picker-modal" class="month-modal-backdrop">
     <div class="month-modal-card">
       <div class="month-modal-header">
-        <div class="year-nav">
-          <button type="button" class="year-arrow-btn" onclick="stepPickerYear(-1)">&lt;</button>
-          <span id="display-picker-year">2026</span>
-          <button type="button" class="year-arrow-btn" onclick="stepPickerYear(1)">&gt;</button>
+        <div class="year-stepper">
+          <button type="button" class="step-btn" onclick="shiftPickerYear(-1)">&lt;</button>
+          <span id="picker-year-display">2026</span>
+          <button type="button" class="step-btn" onclick="shiftPickerYear(1)">&gt;</button>
         </div>
-        <button type="button" class="modal-close-x" onclick="closeMonthPickerModal()">&times;</button>
+        <button type="button" class="close-btn" onclick="closeMonthPicker()">&times;</button>
       </div>
-      <div class="months-grid" id="months-grid-tiles"></div>
-    </div>
-  </div>
-
-  <div id="excel-spreadsheet-modal" class="excel-modal-backdrop">
-    <div class="excel-modal-sheet">
-      <div class="excel-sheet-toolbar">
-        <h3>📊 AttendFlow — Subject Attendance Ledger (<span id="excel-sheet-subject-label">Subject</span>)</h3>
-        <div class="excel-toolbar-actions">
-          <button class="btn" style="background:#ffffff; color:#107c41; font-weight:700; padding:6px 14px;" onclick="exportToCSV()">
-            ⬇️ Export to Excel (.CSV)
-          </button>
-          <button class="btn" style="background:rgba(255,255,255,0.2); color:#ffffff; border:none; padding:6px 12px;" onclick="closeExcelSpreadsheetModal()">
-            ✕ Close
-          </button>
-        </div>
-      </div>
-
-      <div class="excel-subbar">
-        <span>Microsoft Excel / Google Sheets Compatible Grid</span>
-        <div class="excel-search-box">
-          🔍 <input type="text" id="excel-search-input" placeholder="Search student name..." oninput="renderExcelGrid()" />
-        </div>
-      </div>
-
-      <div class="spreadsheet-scroll-area">
-        <table class="spreadsheet-table" id="spreadsheet-master-table">
-          <thead id="spreadsheet-head"></thead>
-          <tbody id="spreadsheet-body"></tbody>
-        </table>
-      </div>
+      <div class="months-grid" id="months-grid-container"></div>
     </div>
   </div>
 
   <script>
     const DEFAULT_SUBJECTS = [
-      { id: "sub_fmi",  code: "FMI",  name: "Fundamental of Management & Information", accentClass: "accent-fmi",  tagClass: "tag-fmi" },
-      { id: "sub_dpos", code: "DPOS", name: "Design and Principles of Operating Systems", accentClass: "accent-dpos", tagClass: "tag-dpos" },
-      { id: "sub_ppwc", code: "PPWC", name: "Programming Practices with C",            accentClass: "accent-ppwc", tagClass: "tag-ppwc" },
-      { id: "sub_itc",  code: "ITC",  name: "Information Theory and Coding",           accentClass: "accent-itc",  tagClass: "tag-itc" },
-      { id: "sub_ips",  code: "IPS",  name: "Internet Protocols & Security",           accentClass: "accent-ips",  tagClass: "tag-ips" },
-      { id: "sub_mlc",  code: "MLC",  name: "Machine Learning Concepts",               accentClass: "accent-mlc",  tagClass: "tag-mlc" },
-      { id: "sub_cn",   code: "CN",   name: "Computer Networks",                       accentClass: "accent-cn",   tagClass: "tag-cn" }
+      { id: "sub_fmi",  code: "FMI",  name: "Fundamental of Management & Information", classColor: "card-fmi",  badgeColor: "badge-fmi" },
+      { id: "sub_dpos", code: "DPOS", name: "Design and Principles of Operating Systems", classColor: "card-dpos", badgeColor: "badge-dpos" },
+      { id: "sub_ppwc", code: "PPWC", name: "Programming Practices with C",            classColor: "card-ppwc", badgeColor: "badge-ppwc" },
+      { id: "sub_itc",  code: "ITC",  name: "Information Theory and Coding",           classColor: "card-itc",  badgeColor: "badge-itc" },
+      { id: "sub_ips",  code: "IPS",  name: "Internet Protocols & Security",           classColor: "card-ips",  badgeColor: "badge-ips" },
+      { id: "sub_mlc",  code: "MLC",  name: "Machine Learning Concepts",               classColor: "card-mlc",  badgeColor: "badge-mlc" },
+      { id: "sub_cn",   code: "CN",   name: "Computer Networks",                       classColor: "card-cn",   badgeColor: "badge-cn" }
     ];
 
-    const MONTHS = [
+    const MONTH_NAMES = [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
 
-    const DB_USERS = "attendflow_users_v4";
-    const DB_LOGS = "attendflow_logs_v4";
-    const DB_AUTH = "attendflow_auth_v4";
-    const DB_TT = "attendflow_tt_v4";
-    const DB_TT_IMG = "attendflow_tt_img_v4";
+    const DB_KEY_USERS = "attendflow_users_v4";
+    const DB_KEY_LOGS = "attendflow_logs_v4";
+    const DB_KEY_ACTIVE = "attendflow_active_v4";
+    const DB_KEY_TT = "attendflow_tt_v4";
+    const DB_KEY_TT_IMG = "attendflow_tt_img_v4";
 
-    let activeRole = "student";
+    let selectedRole = "student";
     let isRegisterMode = false;
-    let loggedInUser = JSON.parse(localStorage.getItem(DB_AUTH)) || null;
+    let currentUser = JSON.parse(localStorage.getItem(DB_KEY_ACTIVE)) || null;
 
-    const todayDate = new Date();
-    let currentYear = todayDate.getFullYear();
-    let currentMonthIdx = todayDate.getMonth();
+    const initialToday = new Date();
+    let currentYear = initialToday.getFullYear();
+    let currentMonthIndex = initialToday.getMonth();
     let pickerYear = currentYear;
-    let selectedDateISO = todayDate.toISOString().split("T")[0];
-    let liveWebcamStream = null;
+    let selectedDateString = initialToday.toISOString().split("T")[0];
+    let mediaStream = null;
 
-    function initApp() {
-      seedInitialDatabase();
-      buildMonthDaysScroller(currentYear, currentMonthIdx);
-      if (loggedInUser) {
-        showPortal();
+    function init() {
+      seedDatabase();
+      renderMonthDaysScroller(currentYear, currentMonthIndex);
+      if (currentUser) {
+        openDashboard();
       } else {
-        switchScreen("auth-screen");
+        showScreen("auth-screen");
       }
     }
 
-    function seedInitialDatabase() {
-      let users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
+    function seedDatabase() {
+      let users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
       if (!users.some(u => u.role === "student")) {
-        users.push({ name: "Rahul Sharma", email: "rahul@gmail.com", pass: "123456", role: "student" });
+        users.push({ name: "Bibhav", email: "bibhav@gmail.com", pass: "123456", role: "student" });
         users.push({ name: "Priya Patel", email: "priya@gmail.com", pass: "123456", role: "student" });
         users.push({ name: "Amit Kumar", email: "amit@gmail.com", pass: "123456", role: "student" });
-        users.push({ name: "Sneha Mishra", email: "sneha@gmail.com", pass: "123456", role: "student" });
       }
       if (!users.some(u => u.role === "teacher")) {
         users.push({ 
-          name: "Prof. Ananya Sen", 
+          name: "Prof. Sen", 
           email: "teacher.fmi@gmail.com", 
           pass: "123456", 
           role: "teacher", 
           subjectId: "sub_fmi" 
         });
       }
-      localStorage.setItem(DB_USERS, JSON.stringify(users));
+      localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
 
-      // Seed comprehensive attendance logs for rich date-by-date spreadsheet representation
-      let logs = JSON.parse(localStorage.getItem(DB_LOGS));
+      let logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS));
       if (!logs) {
-        logs = {
-          "2026-09-01": {
-            "rahul@gmail.com": { "sub_fmi": "present", "sub_cn": "present", "sub_dpos": "present" },
-            "priya@gmail.com": { "sub_fmi": "present", "sub_cn": "absent",  "sub_dpos": "present" },
-            "amit@gmail.com":  { "sub_fmi": "absent",  "sub_cn": "present", "sub_dpos": "absent" },
-            "sneha@gmail.com": { "sub_fmi": "present", "sub_cn": "present", "sub_dpos": "present" }
-          },
-          "2026-09-02": {
-            "rahul@gmail.com": { "sub_fmi": "present", "sub_cn": "present" },
-            "priya@gmail.com": { "sub_fmi": "absent",  "sub_cn": "present" },
-            "amit@gmail.com":  { "sub_fmi": "absent",  "sub_cn": "absent" },
-            "sneha@gmail.com": { "sub_fmi": "present", "sub_cn": "present" }
-          },
-          "2026-09-03": {
-            "rahul@gmail.com": { "sub_fmi": "absent",  "sub_cn": "absent" },
-            "priya@gmail.com": { "sub_fmi": "present", "sub_cn": "present" },
-            "amit@gmail.com":  { "sub_fmi": "absent",  "sub_cn": "absent" },
-            "sneha@gmail.com": { "sub_fmi": "present", "sub_cn": "present" }
-          },
-          "2026-09-04": {
-            "rahul@gmail.com": { "sub_fmi": "present", "sub_cn": "present" },
-            "priya@gmail.com": { "sub_fmi": "present", "sub_cn": "present" },
-            "amit@gmail.com":  { "sub_fmi": "present", "sub_cn": "absent" },
-            "sneha@gmail.com": { "sub_fmi": "present", "sub_cn": "present" }
-          }
+        const todayStr = new Date().toISOString().split("T")[0];
+        logs = {};
+        logs[todayStr] = {
+          "bibhav@gmail.com": { "sub_fmi": "present" }
         };
-        localStorage.setItem(DB_LOGS, JSON.stringify(logs));
+        localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
       }
     }
 
-    function switchScreen(screenId) {
+    function showScreen(screenId) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(screenId).classList.add("active");
     }
 
-    function setAuthRole(role) {
-      activeRole = role;
-      document.getElementById("btn-role-student").classList.toggle("active", role === "student");
-      document.getElementById("btn-role-teacher").classList.toggle("active", role === "teacher");
-      document.getElementById("group-teacher-subject").style.display = (role === "teacher") ? "flex" : "none";
-      document.getElementById("btn-auth-submit").textContent = 
-        `${isRegisterMode ? "Create Account as" : "Sign In as"} ${role === 'student' ? 'Student' : 'Teacher'}`;
+    function setRole(role) {
+      selectedRole = role;
+      document.getElementById("role-btn-student").classList.toggle("active", role === "student");
+      document.getElementById("role-btn-teacher").classList.toggle("active", role === "teacher");
+      document.getElementById("teacher-subject-group").style.display = (role === "teacher") ? "flex" : "none";
+      document.getElementById("auth-submit-btn").textContent = 
+        `${isRegisterMode ? "Create" : "Sign In as"} ${role.charAt(0).toUpperCase() + role.slice(1)}`;
     }
 
     function toggleAuthMode(e) {
       e.preventDefault();
       isRegisterMode = !isRegisterMode;
-      document.getElementById("group-user-name").style.display = isRegisterMode ? "flex" : "none";
-      document.getElementById("auth-subtitle-desc").textContent = isRegisterMode 
-        ? "Create a new student or faculty account" 
-        : "Sign in with your verified Gmail credentials";
-      document.getElementById("btn-auth-submit").textContent = 
-        `${isRegisterMode ? "Create Account as" : "Sign In as"} ${activeRole === 'student' ? 'Student' : 'Teacher'}`;
-      document.getElementById("auth-mode-prompt").textContent = isRegisterMode 
+      document.getElementById("name-input-group").style.display = isRegisterMode ? "flex" : "none";
+      document.getElementById("auth-subtitle").textContent = isRegisterMode 
+        ? "Create a new account" 
+        : "Sign in to your academic portal";
+      document.getElementById("auth-submit-btn").textContent = 
+        `${isRegisterMode ? "Create" : "Sign In as"} ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`;
+      document.getElementById("auth-mode-label").textContent = isRegisterMode 
         ? "Already registered?" 
         : "Don't have an account?";
-      document.getElementById("auth-mode-toggler").textContent = isRegisterMode 
+      document.getElementById("auth-mode-link").textContent = isRegisterMode 
         ? "Sign In instead" 
         : "Create an account";
     }
 
-    document.getElementById("auth-submit-form").addEventListener("submit", (e) => {
+    document.getElementById("auth-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      const email = document.getElementById("input-user-email").value.trim().toLowerCase();
-      const pass = document.getElementById("input-user-pass").value;
-      const assignedSubject = document.getElementById("select-teacher-subject").value;
+      const email = document.getElementById("user-email").value.trim().toLowerCase();
+      const pass = document.getElementById("user-password").value;
+      const assignedSub = document.getElementById("teacher-subject-select").value;
 
       if (!email.endsWith("@gmail.com")) {
-        alert("Please enter a valid Google Mail address (@gmail.com).");
+        alert("Please enter a valid Gmail (@gmail.com).");
         return;
       }
 
-      let users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
+      let users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
 
       if (isRegisterMode) {
-        const name = document.getElementById("input-user-name").value.trim();
+        const name = document.getElementById("user-name").value.trim();
         if (!name) {
-          alert("Please enter your name.");
+          alert("Please enter your full name.");
           return;
         }
-        if (users.some(u => u.email === email && u.role === activeRole)) {
-          alert(`An account already exists for this Gmail as a ${activeRole}.`);
+        if (users.some(u => u.email === email && u.role === selectedRole)) {
+          alert(`An account already exists for this Gmail as a ${selectedRole}.`);
           return;
         }
-        const newUser = {
-          name,
-          email,
-          pass,
-          role: activeRole,
-          subjectId: (activeRole === "teacher") ? assignedSubject : null
+        const newUser = { 
+          name, 
+          email, 
+          pass, 
+          role: selectedRole,
+          subjectId: (selectedRole === "teacher") ? assignedSub : null
         };
         users.push(newUser);
-        localStorage.setItem(DB_USERS, JSON.stringify(users));
-        loggedInUser = newUser;
-        localStorage.setItem(DB_AUTH, JSON.stringify(newUser));
-        showPortal();
+        localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
+        currentUser = newUser;
+        localStorage.setItem(DB_KEY_ACTIVE, JSON.stringify(newUser));
+        openDashboard();
       } else {
-        const match = users.find(u => u.email === email && u.pass === pass && u.role === activeRole);
+        const match = users.find(u => u.email === email && u.pass === pass && u.role === selectedRole);
         if (match) {
           if (match.role === "teacher" && !match.subjectId) {
-            match.subjectId = assignedSubject;
-            localStorage.setItem(DB_USERS, JSON.stringify(users));
+            match.subjectId = assignedSub;
+            localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
           }
-          loggedInUser = match;
-          localStorage.setItem(DB_AUTH, JSON.stringify(match));
-          showPortal();
+          currentUser = match;
+          localStorage.setItem(DB_KEY_ACTIVE, JSON.stringify(match));
+          openDashboard();
         } else {
-          alert(`Invalid credentials for ${activeRole}. If you do not have an account, click "Create an account".`);
+          alert(`Invalid credentials for ${selectedRole}.`);
         }
       }
     });
 
-    function logoutSession() {
-      loggedInUser = null;
-      localStorage.removeItem(DB_AUTH);
-      switchScreen("auth-screen");
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem(DB_KEY_ACTIVE);
+      showScreen("auth-screen");
     }
 
-    function showPortal() {
-      switchScreen("portal-screen");
-      document.getElementById("display-user-greeting").textContent = loggedInUser.name;
-      document.getElementById("display-role-badge").textContent = 
-        loggedInUser.role.charAt(0).toUpperCase() + loggedInUser.role.slice(1);
+    function openDashboard() {
+      showScreen("main-screen");
+      document.getElementById("user-display-name").textContent = currentUser.name;
+      document.getElementById("current-role-badge").textContent = 
+        currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
 
-      if (loggedInUser.role === "teacher") {
-        document.getElementById("student-tabs-nav").style.display = "none";
-        document.getElementById("teacher-tabs-nav").style.display = "flex";
-        activateTab("teacher-section");
-        renderTeacherSubjectPortal();
+      const mobileBar = document.getElementById("student-mobile-bar");
+      const desktopTabs = document.getElementById("student-desktop-tabs");
+
+      if (currentUser.role === "teacher") {
+        desktopTabs.style.display = "none";
+        mobileBar.classList.remove("show-mobile-bar");
+        switchTab("teacher-view-tab");
+        renderSubjectRestrictedTeacherPortal();
       } else {
-        document.getElementById("student-tabs-nav").style.display = "flex";
-        document.getElementById("teacher-tabs-nav").style.display = "none";
-        activateTab("attendance-section");
-        renderStudentSubjectCards();
-        renderTimetableSchedule();
+        desktopTabs.style.display = "flex";
+        mobileBar.classList.add("show-mobile-bar");
+        switchTab("attendance-tab");
+        renderStudentCards();
+        renderTimetable();
         loadSavedTimetablePhoto();
       }
     }
 
-    function activateTab(tabId) {
-      document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
-      document.querySelectorAll(".nav-tab-btn").forEach(btn => btn.classList.remove("active"));
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add("active");
 
-      const target = document.getElementById(tabId);
-      if (target) target.classList.add("active");
-
-      document.querySelectorAll(".nav-tab-btn").forEach(btn => {
-        if (btn.getAttribute("onclick")?.includes(tabId)) {
-          btn.classList.add("active");
-        }
+      // Sync desktop tabs
+      document.querySelectorAll(".tab-item-desktop").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("onclick")?.includes(tabId));
       });
+
+      // Sync mobile bottom navigation tabs
+      document.querySelectorAll(".mobile-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-target") === tabId);
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openMonthPickerModal() {
+    /* MONTH SELECTOR */
+    function openMonthPicker() {
       pickerYear = currentYear;
-      buildMonthGridTiles();
+      renderMonthGrid();
       document.getElementById("month-picker-modal").classList.add("show");
     }
 
-    function closeMonthPickerModal() {
+    function closeMonthPicker() {
       document.getElementById("month-picker-modal").classList.remove("show");
     }
 
-    function stepPickerYear(delta) {
+    function shiftPickerYear(delta) {
       pickerYear += delta;
-      buildMonthGridTiles();
+      renderMonthGrid();
     }
 
-    function buildMonthGridTiles() {
-      document.getElementById("display-picker-year").textContent = pickerYear;
-      const container = document.getElementById("months-grid-tiles");
-      container.innerHTML = "";
+    function renderMonthGrid() {
+      document.getElementById("picker-year-display").textContent = pickerYear;
+      const grid = document.getElementById("months-grid-container");
+      grid.innerHTML = "";
 
-      MONTHS.forEach((mName, idx) => {
+      MONTH_NAMES.forEach((mName, index) => {
         const tile = document.createElement("div");
-        const isSelected = (idx === currentMonthIdx && pickerYear === currentYear);
-        tile.className = `month-tile ${isSelected ? 'selected' : ''}`;
+        const isCurrent = (index === currentMonthIndex && pickerYear === currentYear);
+        tile.className = `month-tile ${isCurrent ? 'current-selected' : ''}`;
         tile.textContent = mName.substring(0, 3);
-        tile.addEventListener("click", () => {
-          currentYear = pickerYear;
-          currentMonthIdx = idx;
-          closeMonthPickerModal();
-          buildMonthDaysScroller(currentYear, currentMonthIdx);
-        });
-        container.appendChild(tile);
+        tile.addEventListener("click", () => selectMonth(pickerYear, index));
+        grid.appendChild(tile);
       });
     }
 
-    function buildMonthDaysScroller(year, monthIdx) {
-      const track = document.getElementById("days-scroller-track");
+    function selectMonth(year, monthIdx) {
+      currentYear = year;
+      currentMonthIndex = monthIdx;
+      closeMonthPicker();
+      renderMonthDaysScroller(currentYear, currentMonthIndex);
+    }
+
+    /* MONTH SCROLLER GENERATOR */
+    function renderMonthDaysScroller(year, monthIndex) {
+      const track = document.getElementById("date-scroller-track");
       track.innerHTML = "";
 
-      const shortMonth = MONTHS[monthIdx].substring(0, 3);
-      document.getElementById("month-btn-label").textContent = `${shortMonth} ${year}`;
+      const shortMonth = MONTH_NAMES[monthIndex].substring(0, 3);
+      document.getElementById("cal-month-badge").textContent = `${shortMonth} ${year}`;
 
-      const daysCount = new Date(year, monthIdx + 1, 0).getDate();
+      const totalDays = new Date(year, monthIndex + 1, 0).getDate();
+      const checkYear = parseInt(selectedDateString.split("-")[0]);
+      const checkMonth = parseInt(selectedDateString.split("-")[1]) - 1;
 
-      const yPart = parseInt(selectedDateISO.split("-")[0]);
-      const mPart = parseInt(selectedDateISO.split("-")[1]) - 1;
-      if (yPart !== year || mPart !== monthIdx) {
-        selectedDateISO = `${year}-${String(monthIdx + 1).padStart(2, '0')}-01`;
+      if (checkYear !== year || checkMonth !== monthIndex) {
+        selectedDateString = `${year}-${String(monthIndex + 1).padStart(2, '0')}-01`;
       }
 
-      let activePillElem = null;
+      let activeCardElement = null;
 
-      for (let day = 1; day <= daysCount; day++) {
-        const dObj = new Date(year, monthIdx, day);
-        const iso = `${year}-${String(monthIdx + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dayAbbr = dObj.toLocaleDateString("en-US", { weekday: "short" });
+      for (let day = 1; day <= totalDays; day++) {
+        const dateObj = new Date(year, monthIndex, day);
+        const dateIso = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" });
 
-        const pill = document.createElement("div");
-        const isActive = (iso === selectedDateISO);
-        pill.className = `day-pill ${isActive ? "active" : ""}`;
-        pill.innerHTML = `
-          <div class="pill-day">${dayAbbr}</div>
-          <div class="pill-date">${day}</div>
-          <div class="pill-month">${shortMonth}</div>
+        const card = document.createElement("div");
+        const isActive = (dateIso === selectedDateString);
+        card.className = `date-card ${isActive ? "active" : ""}`;
+        card.innerHTML = `
+          <div class="day-name">${dayName}</div>
+          <div class="day-num">${day}</div>
+          <div class="month-label">${shortMonth}</div>
         `;
 
         if (isActive) {
-          activePillElem = pill;
-          document.getElementById("active-date-display").textContent = `${dayAbbr}, ${day} ${shortMonth} ${year}`;
+          activeCardElement = card;
+          document.getElementById("selected-date-label").textContent = `${dayName}, ${day} ${shortMonth} ${year}`;
         }
 
-        pill.addEventListener("click", () => {
-          document.querySelectorAll(".day-pill").forEach(p => p.classList.remove("active"));
-          pill.classList.add("active");
-          selectedDateISO = iso;
-          document.getElementById("active-date-display").textContent = `${dayAbbr}, ${day} ${shortMonth} ${year}`;
-          if (loggedInUser && loggedInUser.role === "student") {
-            renderStudentSubjectCards();
+        card.addEventListener("click", () => {
+          document.querySelectorAll(".date-card").forEach(c => c.classList.remove("active"));
+          card.classList.add("active");
+          selectedDateString = dateIso;
+          document.getElementById("selected-date-label").textContent = `${dayName}, ${day} ${shortMonth} ${year}`;
+          if (currentUser && currentUser.role === "student") {
+            renderStudentCards();
           }
         });
 
-        track.appendChild(pill);
+        track.appendChild(card);
       }
 
-      if (activePillElem) {
+      if (activeCardElement) {
         setTimeout(() => {
-          activePillElem.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }, 120);
+          activeCardElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 80);
       }
 
-      if (loggedInUser && loggedInUser.role === "student") {
-        renderStudentSubjectCards();
+      if (currentUser && currentUser.role === "student") {
+        renderStudentCards();
       }
     }
 
-    function getSubjectAttendance(email, subjectId) {
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
+    /* STATS ENGINE */
+    function getStudentSubjectStats(studentEmail, subjectId) {
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
       let attended = 0;
-      let totalHeld = 0;
+      let held = 0;
 
-      for (const dKey in logs) {
-        const record = logs[dKey]?.[email];
-        if (record && record[subjectId]) {
-          const status = record[subjectId];
-          if (status === "present") {
+      for (const dateKey in logs) {
+        const studentLog = logs[dateKey]?.[studentEmail];
+        if (studentLog && studentLog[subjectId]) {
+          const st = studentLog[subjectId];
+          if (st === "present") {
             attended++;
-            totalHeld++;
-          } else if (status === "absent") {
-            totalHeld++;
+            held++;
+          } else if (st === "absent") {
+            held++;
           }
         }
       }
 
-      const pct = totalHeld > 0 ? ((attended / totalHeld) * 100).toFixed(1) : "100.0";
-      return { attended, totalHeld, pct: parseFloat(pct) };
+      const pct = held > 0 ? ((attended / held) * 100).toFixed(1) : "100.0";
+      return { attended, held, pct: parseFloat(pct) };
     }
 
     function calculateNeededClasses(attended, total, target = 75) {
       if (total === 0) return 0;
-      const curPct = (attended / total) * 100;
-      if (curPct >= target) return 0;
+      const currentPct = (attended / total) * 100;
+      if (currentPct >= target) return 0;
       const t = target / 100;
       return Math.ceil((t * total - attended) / (1 - t));
     }
 
-    function renderStudentSubjectCards() {
-      const container = document.getElementById("subjects-stack-list");
+    /* RENDER STUDENT CARDS */
+    function renderStudentCards() {
+      const container = document.getElementById("student-subjects-stack");
       container.innerHTML = "";
 
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
-      const currentDayLogs = logs[selectedDateISO]?.[loggedInUser.email] || {};
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+      const currentDayLogs = logs[selectedDateString]?.[currentUser.email] || {};
 
       DEFAULT_SUBJECTS.forEach(sub => {
-        const stats = getSubjectAttendance(loggedInUser.email, sub.id);
-        const isUnderCriteria = stats.pct < 75.0 && stats.totalHeld > 0;
-        const needed = calculateNeededClasses(stats.attended, stats.totalHeld, 75);
+        const stats = getStudentSubjectStats(currentUser.email, sub.id);
+        const isBelow75 = stats.pct < 75.0 && stats.held > 0;
+        const needed = calculateNeededClasses(stats.attended, stats.held, 75);
         const curStatus = currentDayLogs[sub.id] || null;
 
         const card = document.createElement("div");
-        card.className = `subject-card ${sub.accentClass} ${isUnderCriteria ? "danger-highlight" : ""}`;
+        card.className = `subject-card ${sub.classColor} ${isBelow75 ? "danger-card" : ""}`;
 
         card.innerHTML = `
-          <div class="subject-head-row">
-            <div class="subject-label-wrap">
-              <span class="subject-tag ${sub.tagClass}">${sub.code}</span>
-              <span class="subject-title">${sub.name}</span>
-              ${isUnderCriteria ? '<span class="breach-pill">⚠️ Below 75% Criteria</span>' : ''}
+          <div class="subject-top-row">
+            <div class="subject-title-area">
+              <span class="subject-badge ${sub.badgeColor}">${sub.code}</span>
+              <span class="subject-name">${sub.name}</span>
+              ${isBelow75 ? '<span class="criteria-alert">⚠️ Below 75% Target</span>' : ''}
             </div>
-            <div class="pct-box-display ${isUnderCriteria ? 'danger' : ''}">${stats.pct}%</div>
+            <div class="pct-box ${isBelow75 ? 'danger' : ''}">${stats.pct}%</div>
           </div>
 
-          <div class="progress-bar-rail">
-            <div class="progress-bar-fill" style="width: ${Math.min(stats.pct, 100)}%;"></div>
-          </div>
-
-          <div class="subject-meta-row">
-            <div class="stat-text">
-              Classes Attended: <strong>${stats.attended} / ${stats.totalHeld}</strong>
-            </div>
+          <div class="subject-mid-row">
+            <div>Classes Attended: <span class="stat-val">${stats.attended} / ${stats.held}</span></div>
             <div>
               75% Target: 
-              ${isUnderCriteria 
-                ? `<span class="needed-warning">Must attend next ${needed} lecture(s)</span>`
-                : `<span style="color: var(--success); font-weight: 700;">Safe Zone</span>`
+              ${isBelow75 
+                ? `<span class="needed-stat">Attend next ${needed} class(es)</span>`
+                : `<span style="color: var(--success); font-weight: 600;">Safe Zone</span>`
               }
             </div>
-            <div class="attendance-status-group">
-              <button class="status-btn ${curStatus === 'present' ? 'active-p' : ''}" onclick="toggleStudentAttendance('${sub.id}', 'present')">Present</button>
-              <button class="status-btn ${curStatus === 'absent' ? 'active-a' : ''}" onclick="toggleStudentAttendance('${sub.id}', 'absent')">Absent</button>
-              <button class="status-btn ${curStatus === 'holiday' ? 'active-h' : ''}" onclick="toggleStudentAttendance('${sub.id}', 'holiday')">Holiday</button>
-            </div>
+          </div>
+
+          <div class="attendance-buttons">
+            <button class="att-btn ${curStatus === 'present' ? 'active-p' : ''}" onclick="setAttendance('${sub.id}', 'present')">Present</button>
+            <button class="att-btn ${curStatus === 'absent' ? 'active-a' : ''}" onclick="setAttendance('${sub.id}', 'absent')">Absent</button>
+            <button class="att-btn ${curStatus === 'holiday' ? 'active-h' : ''}" onclick="setAttendance('${sub.id}', 'holiday')">Holiday</button>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
-    function toggleStudentAttendance(subjectId, status) {
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
-      if (!logs[selectedDateISO]) logs[selectedDateISO] = {};
-      if (!logs[selectedDateISO][loggedInUser.email]) logs[selectedDateISO][loggedInUser.email] = {};
+    function setAttendance(subjectId, status) {
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+      if (!logs[selectedDateString]) logs[selectedDateString] = {};
+      if (!logs[selectedDateString][currentUser.email]) logs[selectedDateString][currentUser.email] = {};
 
-      if (logs[selectedDateISO][loggedInUser.email][subjectId] === status) {
-        delete logs[selectedDateISO][loggedInUser.email][subjectId];
+      if (logs[selectedDateString][currentUser.email][subjectId] === status) {
+        delete logs[selectedDateString][currentUser.email][subjectId];
       } else {
-        logs[selectedDateISO][loggedInUser.email][subjectId] = status;
+        logs[selectedDateString][currentUser.email][subjectId] = status;
       }
 
-      localStorage.setItem(DB_LOGS, JSON.stringify(logs));
-      renderStudentSubjectCards();
+      localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
+      renderStudentCards();
     }
 
-    function renderTeacherSubjectPortal() {
-      const assignedSubId = loggedInUser.subjectId || "sub_fmi";
+    /* TEACHER SUBJECT-LOCKED PORTAL */
+    function renderSubjectRestrictedTeacherPortal() {
+      const assignedSubId = currentUser.subjectId || "sub_fmi";
       const assignedSubObj = DEFAULT_SUBJECTS.find(s => s.id === assignedSubId) || DEFAULT_SUBJECTS[0];
 
-      const badge = document.getElementById("teacher-assigned-badge");
+      const badge = document.getElementById("teacher-subject-pill");
       badge.textContent = `${assignedSubObj.code} — ${assignedSubObj.name}`;
-      badge.className = `subject-tag ${assignedSubObj.tagClass}`;
+      badge.className = `subject-badge ${assignedSubObj.badgeColor}`;
 
-      document.getElementById("excel-sheet-subject-label").textContent = `${assignedSubObj.code} (${assignedSubObj.name})`;
-
-      const users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
+      const users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
       const students = users.filter(u => u.role === "student");
       const tbody = document.getElementById("teacher-roster-body");
       tbody.innerHTML = "";
 
       if (students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">No students enrolled yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No students enrolled yet.</td></tr>`;
         return;
       }
 
       students.forEach(st => {
-        const stats = getSubjectAttendance(st.email, assignedSubId);
-        const isBelow = stats.pct < 75.0 && stats.totalHeld > 0;
-        const needed = calculateNeededClasses(stats.attended, stats.totalHeld, 75);
+        const stats = getStudentSubjectStats(st.email, assignedSubId);
+        const isBelow = stats.pct < 75.0 && stats.held > 0;
+        const needed = calculateNeededClasses(stats.attended, stats.held, 75);
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><strong>${st.name}</strong></td>
           <td>${st.email}</td>
-          <td>${stats.attended} / ${stats.totalHeld}</td>
+          <td>${stats.attended} / ${stats.held}</td>
           <td>
-            <strong style="color: ${isBelow ? 'var(--danger)' : 'var(--success)'};">
+            <strong style="color: ${isBelow ? 'var(--danger)' : 'var(--success)'}">
               ${stats.pct}%
             </strong>
           </td>
           <td>
             ${isBelow 
-              ? `<span style="color: var(--danger); font-weight: 700; font-size: 0.8rem; background: #fee2e2; padding: 3px 8px; border-radius: 4px;">Defaulter (Needs ${needed} lectures)</span>` 
-              : `<span style="color: var(--success); font-weight: 700; font-size: 0.8rem; background: #dcfce7; padding: 3px 8px; border-radius: 4px;">Eligible (Safe)</span>`
+              ? `<span style="color: var(--danger); font-weight: 600; font-size: 0.8rem; background: #fee2e2; padding: 2px 8px; border-radius: 4px;">Defaulter (Needs ${needed})</span>` 
+              : `<span style="color: var(--success); font-weight: 600; font-size: 0.8rem; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Eligible (Safe)</span>`
             }
           </td>
           <td style="text-align: center;">
-            <button class="btn-danger-outline" onclick="teacherMarkAbsent('${st.email}', '${st.name}')" title="Correct false presence">
+            <button class="btn-danger-outline" onclick="teacherMarkAbsent('${st.email}', '${st.name}')" title="Override false attendance">
               ⚠️ Mark Absent
             </button>
           </td>
@@ -1586,193 +1415,34 @@
     }
 
     function teacherMarkAbsent(studentEmail, studentName) {
-      const todayISO = new Date().toISOString().split("T")[0];
-      const targetDate = prompt(`Enter date to mark ${studentName} ABSENT (YYYY-MM-DD):`, todayISO);
-
+      const todayStr = new Date().toISOString().split("T")[0];
+      const targetDate = prompt(`Enter date to mark ${studentName} ABSENT (YYYY-MM-DD):`, todayStr);
       if (!targetDate) return;
 
-      const assignedSubId = loggedInUser.subjectId || "sub_fmi";
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
+      const assignedSubId = currentUser.subjectId || "sub_fmi";
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
 
       if (!logs[targetDate]) logs[targetDate] = {};
       if (!logs[targetDate][studentEmail]) logs[targetDate][studentEmail] = {};
 
       logs[targetDate][studentEmail][assignedSubId] = "absent";
-      localStorage.setItem(DB_LOGS, JSON.stringify(logs));
+      localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
 
-      alert(`Success: ${studentName} has been marked ABSENT for ${assignedSubId.replace('sub_', '').toUpperCase()} on ${targetDate}.`);
-      renderTeacherSubjectPortal();
+      alert(`Updated: ${studentName} marked ABSENT on ${targetDate}.`);
+      renderSubjectRestrictedTeacherPortal();
     }
 
-    function openExcelSpreadsheetModal() {
-      document.getElementById("excel-search-input").value = "";
-      renderExcelGrid();
-      document.getElementById("excel-spreadsheet-modal").classList.add("show");
-    }
-
-    function closeExcelSpreadsheetModal() {
-      document.getElementById("excel-spreadsheet-modal").classList.remove("show");
-    }
-
-    function getSortedRecordedDates(subjectId) {
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
-      const datesSet = new Set();
-
-      for (const dKey in logs) {
-        const dayRecord = logs[dKey];
-        for (const email in dayRecord) {
-          if (dayRecord[email][subjectId]) {
-            datesSet.add(dKey);
-            break;
-          }
-        }
-      }
-      return Array.from(datesSet).sort();
-    }
-
-    function renderExcelGrid() {
-      const assignedSubId = loggedInUser.subjectId || "sub_fmi";
-      const users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
-      const query = document.getElementById("excel-search-input").value.trim().toLowerCase();
-      
-      let students = users.filter(u => u.role === "student");
-      if (query) {
-        students = students.filter(s => s.name.toLowerCase().includes(query) || s.email.toLowerCase().includes(query));
-      }
-
-      const recordedDates = getSortedRecordedDates(assignedSubId);
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
-
-      // Build Table Header (Excel style: #, Student Name, Email, [Dates...], Attended, Held, %, Status)
-      const thead = document.getElementById("spreadsheet-head");
-      let headHtml = `
-        <tr>
-          <th>#</th>
-          <th style="text-align:left;">Student Name</th>
-          <th style="text-align:left;">Gmail Address</th>
-      `;
-      recordedDates.forEach(dt => {
-        const parts = dt.split("-");
-        const formatted = `${parts[2]}/${parts[1]}`;
-        headHtml += `<th title="${dt}">${formatted}</th>`;
-      });
-      headHtml += `
-          <th>Attended</th>
-          <th>Total Held</th>
-          <th>Percentage</th>
-          <th>Criteria (75%)</th>
-        </tr>
-      `;
-      thead.innerHTML = headHtml;
-
-      // Build Table Body
-      const tbody = document.getElementById("spreadsheet-body");
-      if (students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${recordedDates.length + 7}" style="text-align:center; padding:20px; color:#64748b;">No student records found.</td></tr>`;
-        return;
-      }
-
-      let bodyHtml = "";
-      students.forEach((st, idx) => {
-        const stats = getSubjectAttendance(st.email, assignedSubId);
-        const isDefaulter = stats.pct < 75.0 && stats.totalHeld > 0;
-
-        bodyHtml += `
-          <tr>
-            <td class="row-num-col">${idx + 1}</td>
-            <td style="font-weight:600;">${st.name}</td>
-            <td style="color:#64748b;">${st.email}</td>
-        `;
-
-        // Date-by-date columns
-        recordedDates.forEach(dt => {
-          const status = logs[dt]?.[st.email]?.[assignedSubId];
-          if (status === "present") {
-            bodyHtml += `<td class="center cell-present">P</td>`;
-          } else if (status === "absent") {
-            bodyHtml += `<td class="center cell-absent">A</td>`;
-          } else if (status === "holiday") {
-            bodyHtml += `<td class="center cell-holiday">H</td>`;
-          } else {
-            bodyHtml += `<td class="center" style="color:#cbd5e1;">-</td>`;
-          }
-        });
-
-        bodyHtml += `
-            <td class="center" style="font-weight:700;">${stats.attended}</td>
-            <td class="center">${stats.totalHeld}</td>
-            <td class="center ${isDefaulter ? 'cell-danger' : 'cell-safe'}">${stats.pct}%</td>
-            <td class="center ${isDefaulter ? 'cell-danger' : 'cell-safe'}">${isDefaulter ? 'DEFAULTER' : 'ELIGIBLE'}</td>
-          </tr>
-        `;
-      });
-      tbody.innerHTML = bodyHtml;
-    }
-
-    function exportToCSV() {
-      const assignedSubId = loggedInUser.subjectId || "sub_fmi";
-      const assignedSubObj = DEFAULT_SUBJECTS.find(s => s.id === assignedSubId) || DEFAULT_SUBJECTS[0];
-      const users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
-      const students = users.filter(u => u.role === "student");
-      const recordedDates = getSortedRecordedDates(assignedSubId);
-      const logs = JSON.parse(localStorage.getItem(DB_LOGS)) || {};
-
-      let csvContent = "";
-
-      // Title & metadata banner in CSV
-      csvContent += `"AttendFlow - Subject Attendance Ledger"\n`;
-      csvContent += `"Subject:","${assignedSubObj.code} - ${assignedSubObj.name}"\n`;
-      csvContent += `"Generated On:","${new Date().toLocaleString()}"\n\n`;
-
-      // Header row
-      const headers = ["Roll No", "Student Name", "Gmail Address"];
-      recordedDates.forEach(dt => headers.push(dt));
-      headers.push("Attended", "Total Held", "Attendance %", "75% Status");
-      csvContent += headers.map(h => `"${h}"`).join(",") + "\n";
-
-      // Student rows
-      students.forEach((st, idx) => {
-        const stats = getSubjectAttendance(st.email, assignedSubId);
-        const isDefaulter = stats.pct < 75.0 && stats.totalHeld > 0;
-        const row = [idx + 1, st.name, st.email];
-
-        recordedDates.forEach(dt => {
-          const status = logs[dt]?.[st.email]?.[assignedSubId];
-          row.push(status ? status.toUpperCase() : "N/A");
-        });
-
-        row.push(stats.attended);
-        row.push(stats.totalHeld);
-        row.push(`${stats.pct}%`);
-        row.push(isDefaulter ? "DEFAULTER" : "ELIGIBLE");
-
-        csvContent += row.map(val => `"${val}"`).join(",") + "\n";
-      });
-
-      // Create downloadable Blob
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", `Attendance_${assignedSubObj.code}_${new Date().toISOString().split("T")[0]}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-
-    function renderTimetableSchedule() {
-      const defaultTT = [
-        { day: "Monday", time: "09:00 - 10:30 AM", subject: "FMI", room: "Lecture Hall A" },
+    /* TIMETABLE */
+    function renderTimetable() {
+      const defaults = [
+        { day: "Monday", time: "09:00 - 10:30 AM", subject: "FMI", room: "Hall A" },
         { day: "Tuesday", time: "10:30 - 12:00 PM", subject: "DPOS", room: "Lab 3" },
         { day: "Wednesday", time: "01:00 - 02:30 PM", subject: "PPWC", room: "Lab 1" },
         { day: "Thursday", time: "09:00 - 10:30 AM", subject: "ITC", room: "Hall B" },
-        { day: "Friday", time: "11:00 - 12:30 PM", subject: "CN", room: "Lecture Hall C" }
+        { day: "Friday", time: "11:00 - 12:30 PM", subject: "CN", room: "Hall C" }
       ];
-
-      const entries = JSON.parse(localStorage.getItem(DB_TT)) || defaultTT;
-      const tbody = document.getElementById("timetable-table-body");
-      tbody.innerHTML = entries.map(item => `
+      const data = JSON.parse(localStorage.getItem(DB_KEY_TT)) || defaults;
+      document.getElementById("timetable-body").innerHTML = data.map(item => `
         <tr>
           <td><strong>${item.day}</strong></td>
           <td>${item.time}</td>
@@ -1782,61 +1452,58 @@
       `).join("");
     }
 
-    function promptManualTimetable() {
-      const day = prompt("Enter Day (e.g., Monday):");
-      const time = prompt("Enter Time Slot (e.g., 10:00 - 11:30 AM):");
+    function addManualTimetableEntry() {
+      const day = prompt("Enter Day (e.g. Monday):");
+      const time = prompt("Enter Time (e.g. 10:00 - 11:30 AM):");
       const subject = prompt("Enter Subject (FMI, DPOS, PPWC, ITC, IPS, MLC, CN):");
-      const room = prompt("Enter Room / Lab No:");
+      const room = prompt("Enter Room / Lab:");
 
       if (day && time && subject) {
-        const stored = JSON.parse(localStorage.getItem(DB_TT)) || [];
-        stored.push({ day, time, subject, room: room || "N/A" });
-        localStorage.setItem(DB_TT, JSON.stringify(stored));
-        renderTimetableSchedule();
+        const data = JSON.parse(localStorage.getItem(DB_KEY_TT)) || [];
+        data.push({ day, time, subject, room: room || "N/A" });
+        localStorage.setItem(DB_KEY_TT, JSON.stringify(data));
+        renderTimetable();
       }
     }
 
-    async function initCameraStream() {
-      const box = document.getElementById("camera-stream-box");
+    async function startCamera() {
+      const box = document.getElementById("camera-box");
       box.style.display = "flex";
       try {
-        liveWebcamStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }
-        });
-        document.getElementById("camera-video-elem").srcObject = liveWebcamStream;
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        document.getElementById("camera-feed").srcObject = mediaStream;
       } catch (err) {
-        alert("Camera unavailable or permission denied: " + err.message);
+        alert("Camera error: " + err.message);
         box.style.display = "none";
       }
     }
 
-    function closeCameraStream() {
-      if (liveWebcamStream) {
-        liveWebcamStream.getTracks().forEach(track => track.stop());
-        liveWebcamStream = null;
+    function stopCamera() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
       }
-      document.getElementById("camera-stream-box").style.display = "none";
+      document.getElementById("camera-box").style.display = "none";
     }
 
-    function snapTimetablePhoto() {
-      if (!liveWebcamStream) return;
-      const vid = document.getElementById("camera-video-elem");
-      const cvs = document.getElementById("camera-canvas-elem");
-      cvs.width = vid.videoWidth;
-      cvs.height = vid.videoHeight;
-      cvs.getContext("2d").drawImage(vid, 0, 0);
-
-      const base64Img = cvs.toDataURL("image/png");
-      localStorage.setItem(DB_TT_IMG, base64Img);
+    function captureCamera() {
+      if (!mediaStream) return;
+      const v = document.getElementById("camera-feed");
+      const c = document.getElementById("camera-canvas");
+      c.width = v.videoWidth;
+      c.height = v.videoHeight;
+      c.getContext("2d").drawImage(v, 0, 0);
+      const img = c.toDataURL("image/png");
+      localStorage.setItem(DB_KEY_TT_IMG, img);
       loadSavedTimetablePhoto();
-      closeCameraStream();
+      stopCamera();
     }
 
     function loadSavedTimetablePhoto() {
-      const img = localStorage.getItem(DB_TT_IMG);
-      const container = document.getElementById("timetable-photo-box");
+      const img = localStorage.getItem(DB_KEY_TT_IMG);
+      const container = document.getElementById("tt-img-container");
       if (img) {
-        document.getElementById("timetable-photo-preview").src = img;
+        document.getElementById("tt-img-preview").src = img;
         container.style.display = "block";
       } else {
         container.style.display = "none";
@@ -1844,52 +1511,51 @@
     }
 
     function clearTimetablePhoto() {
-      localStorage.removeItem(DB_TT_IMG);
+      localStorage.removeItem(DB_KEY_TT_IMG);
       loadSavedTimetablePhoto();
     }
 
-    function computeAttendanceStrategy() {
-      const attended = parseInt(document.getElementById("calc-attended-classes").value, 10);
-      const total = parseInt(document.getElementById("calc-total-classes").value, 10);
-      const outBox = document.getElementById("calc-result-box");
+    /* CALCULATOR */
+    function runCalculator() {
+      const attended = parseInt(document.getElementById("calc-in-attended").value, 10);
+      const total = parseInt(document.getElementById("calc-in-total").value, 10);
+      const out = document.getElementById("calc-result");
 
       if (isNaN(attended) || isNaN(total) || total <= 0 || attended > total) {
-        alert("Please enter valid positive numbers where attended does not exceed total classes held.");
+        alert("Please enter valid positive numbers where attended does not exceed total classes.");
         return;
       }
 
       const pct = ((attended / total) * 100).toFixed(1);
-      outBox.style.display = "block";
+      out.style.display = "block";
 
       if (pct >= 75) {
         const canSkip = Math.floor((attended / 0.75) - total);
-        outBox.style.background = "var(--success-bg)";
-        outBox.style.border = "1px solid var(--success-border)";
-        outBox.innerHTML = `
-          <h4 style="color: var(--success); font-weight: 800; margin-bottom: 4px;">🎉 Criteria Fulfilled (${pct}%)</h4>
-          <p>You can safely miss up to <strong>${canSkip}</strong> upcoming lecture(s) while retaining 75% eligibility.</p>
+        out.style.background = "var(--success-bg)";
+        out.style.border = "1px solid var(--success-border)";
+        out.innerHTML = `
+          <h4 style="color: var(--success); margin-bottom: 4px;">Criteria Met (${pct}%)</h4>
+          <p>You can skip up to <strong>${canSkip}</strong> upcoming class(es) while staying above 75%.</p>
         `;
       } else {
         const needed = calculateNeededClasses(attended, total, 75);
-        outBox.style.background = "var(--danger-bg)";
-        outBox.style.border = "1px solid var(--danger-border)";
-        outBox.innerHTML = `
-          <h4 style="color: var(--danger); font-weight: 800; margin-bottom: 4px;">⚠️ Shortage Alert (${pct}%)</h4>
-          <p>You must attend the next <strong>${needed}</strong> consecutive lecture(s) without missing to recover the 75% criteria.</p>
+        out.style.background = "var(--danger-bg)";
+        out.style.border = "1px solid var(--danger-border)";
+        out.innerHTML = `
+          <h4 style="color: var(--danger); margin-bottom: 4px;">Shortage Detected (${pct}%)</h4>
+          <p>You must attend the next <strong>${needed}</strong> consecutive class(es) to restore 75% eligibility.</p>
         `;
       }
     }
 
-    // Global modal backdrops click closing
     window.addEventListener("click", (e) => {
-      const monthModal = document.getElementById("month-picker-modal");
-      const excelModal = document.getElementById("excel-spreadsheet-modal");
-      if (e.target === monthModal) closeMonthPickerModal();
-      if (e.target === excelModal) closeExcelSpreadsheetModal();
+      const modal = document.getElementById("month-picker-modal");
+      if (e.target === modal) {
+        closeMonthPicker();
+      }
     });
 
-    // Run app on load
-    initApp();
+    init();
   </script>
 </body>
 </html>
