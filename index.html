@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AttendFlow — Academic Attendance Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --warning: #d97706;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+    }
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, select, button {
+      font: inherit;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background-color 0.15s ease;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-outline {
+      background-color: #ffffff;
+      border-color: var(--border);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background-color: #f1f5f9;
+    }
+    .btn-danger-outline {
+      background-color: #ffffff;
+      border-color: var(--danger-border);
+      color: var(--danger);
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-danger-outline:hover {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+    .btn-block { width: 100%; }
+
+    /* AUTHENTICATION */
+    #auth-screen {
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .auth-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 440px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .auth-header p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    .role-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .role-btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .role-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-field {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-field label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .input-field input, .input-field select {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      outline: none;
+      font-size: 0.9rem;
+      background: #ffffff;
+    }
+    .input-field input:focus, .input-field select:focus {
+      border-color: var(--primary);
+    }
+    .auth-toggle-note {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .auth-toggle-note a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* TOP NAVBAR */
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-tag {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #eff6ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .tab-item {
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .tab-item.active {
+      background: #f1f5f9;
+      color: var(--primary);
+    }
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+    .user-pill {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .page-container {
+      max-width: 1050px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 16px;
+      flex: 1;
+    }
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* DATE SCROLLER */
+    .date-scroller-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .date-scroller-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-left h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .cal-icon-btn {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--primary);
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .cal-icon-btn:hover { background: #dbeafe; }
+    .selected-badge {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .scroller-track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-behavior: smooth;
+    }
+    .scroller-track::-webkit-scrollbar { height: 6px; }
+    .scroller-track::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .date-card {
+      min-width: 68px;
+      padding: 10px 8px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .date-card .day-name {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .date-card .day-num {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .date-card .month-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .date-card.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+    }
+    .date-card.active .day-name,
+    .date-card.active .day-num,
+    .date-card.active .month-label {
+      color: #ffffff;
+    }
+
+    /* MONTH MODAL */
+    .month-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .month-modal-backdrop.show { display: flex; }
+    .month-modal-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 360px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .month-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .year-stepper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .step-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .months-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .month-tile {
+      padding: 12px 8px;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .month-tile:hover { background: #e2e8f0; }
+    .month-tile.current-selected {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* SUBJECT CARDS (STUDENT) */
+    .subjects-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .subject-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-fmi  { border-left: 5px solid #2563eb; }
+    .card-dpos { border-left: 5px solid #4f46e5; }
+    .card-ppwc { border-left: 5px solid #9333ea; }
+    .card-itc  { border-left: 5px solid #0d9488; }
+    .card-ips  { border-left: 5px solid #d97706; }
+    .card-mlc  { border-left: 5px solid #e11d48; }
+    .card-cn   { border-left: 5px solid #0284c7; }
+
+    .subject-card.danger-card {
+      border: 1.5px solid var(--danger-border);
+      border-left: 6px solid var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    .subject-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .subject-title-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subject-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #ffffff;
+    }
+    .badge-fmi  { background-color: #2563eb; }
+    .badge-dpos { background-color: #4f46e5; }
+    .badge-ppwc { background-color: #9333ea; }
+    .badge-itc  { background-color: #0d9488; }
+    .badge-ips  { background-color: #d97706; }
+    .badge-mlc  { background-color: #e11d48; }
+    .badge-cn   { background-color: #0284c7; }
+
+    .subject-name { font-size: 1.05rem; font-weight: 700; }
+    .criteria-alert {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--danger);
+      background: #fee2e2;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .pct-box {
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success-border);
+    }
+    .pct-box.danger {
+      background: #fee2e2;
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
+
+    .subject-mid-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .stat-val { font-weight: 700; color: var(--text-main); }
+    .needed-stat { color: var(--danger); font-weight: 700; }
+
+    .attendance-buttons { display: flex; gap: 8px; }
+    .att-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .att-btn:hover { background: #f8fafc; }
+    .att-btn.active-p { background: var(--success); color: #ffffff; border-color: var(--success); }
+    .att-btn.active-a { background: var(--danger); color: #ffffff; border-color: var(--danger); }
+    .att-btn.active-h { background: #64748b; color: #ffffff; border-color: #64748b; }
+
+    /* TEACHER DASHBOARD */
+    .teacher-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .teacher-subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    .roster-table th, .roster-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .roster-table th {
+      background: #f8fafc;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .roster-table tr:hover td { background-color: #f8fafc; }
+
+    .panel-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .camera-feed-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+    }
+    #camera-feed {
+      max-width: 100%;
+      width: 480px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTHENTICATION SCREEN -->
+  <section id="auth-screen" class="screen active">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>AttendFlow</h2>
+        <p id="auth-subtitle">Sign in to your academic dashboard</p>
+      </div>
+
+      <div class="role-switcher">
+        <button type="button" class="role-btn active" id="role-btn-student" onclick="setRole('student')">Student Portal</button>
+        <button type="button" class="role-btn" id="role-btn-teacher" onclick="setRole('teacher')">Teacher Portal</button>
+      </div>
+
+      <form id="auth-form">
+        <div class="input-field" id="name-input-group" style="display: none;">
+          <label for="user-name">Full Name</label>
+          <input type="text" id="user-name" placeholder="John Doe" />
+        </div>
+
+        <div class="input-field" id="teacher-subject-group" style="display: none;">
+          <label for="teacher-subject-select">Select Assigned Teaching Subject</label>
+          <select id="teacher-subject-select">
+            <option value="sub_fmi">FMI — Fundamental of Management & Information</option>
+            <option value="sub_dpos">DPOS — Design and Principles of Operating Systems</option>
+            <option value="sub_ppwc">PPWC — Programming Practices with C</option>
+            <option value="sub_itc">ITC — Information Theory and Coding</option>
+            <option value="sub_ips">IPS — Internet Protocols & Security</option>
+            <option value="sub_mlc">MLC — Machine Learning Concepts</option>
+            <option value="sub_cn">CN — Computer Networks</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <label for="user-email">Gmail Address</label>
+          <input type="email" id="user-email" placeholder="user@gmail.com" required />
+        </div>
+
+        <div class="input-field">
+          <label for="user-password">Password</label>
+          <input type="password" id="user-password" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Sign In as Student</button>
+      </form>
+
+      <div class="auth-toggle-note">
+        <span id="auth-mode-label">Don't have an account?</span>
+        <a href="#" id="auth-mode-link" onclick="toggleAuthMode(event)">Create an account</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN DASHBOARD -->
+  <section id="main-screen" class="screen">
+    <header class="top-nav">
+      <div class="brand-title">
+        AttendFlow
+        <span class="brand-tag" id="current-role-badge">Student</span>
+      </div>
+
+      <nav class="nav-tabs" id="student-nav-tabs">
+        <button class="tab-item active" onclick="switchTab('attendance-tab')">Attendance</button>
+        <button class="tab-item" onclick="switchTab('timetable-tab')">Timetable</button>
+        <button class="tab-item" onclick="switchTab('calc-tab')">Calculator</button>
+      </nav>
+
+      <nav class="nav-tabs" id="teacher-nav-tabs" style="display: none;">
+        <button class="tab-item active">Subject Roster</button>
+      </nav>
+
+      <div class="nav-user">
+        <span class="user-pill" id="user-display-name">User</span>
+        <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="logout()">Sign Out</button>
+      </div>
+    </header>
+
+    <div class="page-container">
+
+      <!-- STUDENT TAB: ATTENDANCE & DATE SCROLLER -->
+      <div id="attendance-tab" class="tab-panel active">
+        <div class="date-scroller-box">
+          <div class="date-scroller-header">
+            <div class="header-left">
+              <h4>Select Date to Track</h4>
+              <button type="button" class="cal-icon-btn" onclick="openMonthPicker()" title="Select Month">
+                📅 <span id="cal-month-badge">Month</span>
+              </button>
+            </div>
+            <span class="selected-badge" id="selected-date-label">Today</span>
+          </div>
+
+          <div class="scroller-track" id="date-scroller-track"></div>
+        </div>
+
+        <div class="subjects-stack" id="student-subjects-stack"></div>
+      </div>
+
+      <!-- STUDENT TAB: TIMETABLE -->
+      <div id="timetable-tab" class="tab-panel">
+        <div class="panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div>
+              <h3 style="font-size: 1.15rem;">Class Timetable</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Snap photo with your camera or add entries manually.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-primary" onclick="startCamera()">📷 Camera Scan</button>
+              <button class="btn btn-outline" onclick="addManualTimetableEntry()">✍️ Add Entry</button>
+            </div>
+          </div>
+
+          <div class="camera-feed-box" id="camera-box">
+            <video id="camera-feed" autoplay playsinline></video>
+            <canvas id="camera-canvas" style="display: none;"></canvas>
+            <div>
+              <button class="btn btn-primary" onclick="captureCamera()">Snap Picture</button>
+              <button class="btn btn-outline" onclick="stopCamera()">Cancel</button>
+            </div>
+          </div>
+
+          <div id="tt-img-container" style="display: none; margin-bottom: 16px;">
+            <img id="tt-img-preview" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border);" />
+            <br />
+            <button class="btn btn-outline" style="margin-top: 8px; font-size: 0.8rem;" onclick="clearTimetablePhoto()">Remove Photo</button>
+          </div>
+
+          <table class="roster-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Time Slot</th>
+                <th>Subject</th>
+                <th>Room</th>
+              </tr>
+            </thead>
+            <tbody id="timetable-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STUDENT TAB: CALCULATOR -->
+      <div id="calc-tab" class="tab-panel">
+        <div class="panel-card" style="max-width: 500px; margin: 0 auto;">
+          <h3 style="margin-bottom: 6px;">75% Attendance Calculator</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+            Check how many consecutive classes you need to attend to satisfy criteria.
+          </p>
+
+          <div class="input-field">
+            <label>Classes Attended</label>
+            <input type="number" id="calc-in-attended" min="0" placeholder="e.g. 15" />
+          </div>
+          <div class="input-field">
+            <label>Total Classes Held</label>
+            <input type="number" id="calc-in-total" min="1" placeholder="e.g. 24" />
+          </div>
+          <button class="btn btn-primary btn-block" onclick="runCalculator()">Calculate Requirement</button>
+
+          <div id="calc-result" style="display: none; margin-top: 18px; padding: 14px; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.5;"></div>
+        </div>
+      </div>
+
+      <!-- TEACHER TAB: ACCESS ONLY FOR ASSIGNED SUBJECT + OVERRIDE ABSENT OPTION -->
+      <div id="teacher-view-tab" class="tab-panel">
+        <div class="teacher-card">
+          <div class="teacher-subject-header">
+            <div>
+              <h3>Subject Attendance Directory</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                Restricted access: Viewing attendance for enrolled students exclusively in your assigned subject.
+              </p>
+            </div>
+            <div id="teacher-subject-pill" style="padding: 6px 14px; border-radius: 8px; font-weight: 700; color: #fff; background: var(--primary);">
+              Subject
+            </div>
+          </div>
+
+          <table class="roster-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Gmail Address</th>
+                <th>Attended / Total</th>
+                <th>Attendance %</th>
+                <th>75% Eligibility Status</th>
+                <th style="text-align: center;">Teacher Action</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-roster-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MONTH-ONLY MODAL -->
+  <div id="month-picker-modal" class="month-modal-backdrop">
+    <div class="month-modal-card">
+      <div class="month-modal-header">
+        <div class="year-stepper">
+          <button type="button" class="step-btn" onclick="shiftPickerYear(-1)">&lt;</button>
+          <span id="picker-year-display">2026</span>
+          <button type="button" class="step-btn" onclick="shiftPickerYear(1)">&gt;</button>
+        </div>
+        <button type="button" class="close-btn" onclick="closeMonthPicker()">&times;</button>
+      </div>
+      <div class="months-grid" id="months-grid-container"></div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_SUBJECTS = [
+      { id: "sub_fmi",  code: "FMI",  name: "Fundamental of Management & Information", classColor: "card-fmi",  badgeColor: "badge-fmi" },
+      { id: "sub_dpos", code: "DPOS", name: "Design and Principles of Operating Systems", classColor: "card-dpos", badgeColor: "badge-dpos" },
+      { id: "sub_ppwc", code: "PPWC", name: "Programming Practices with C",            classColor: "card-ppwc", badgeColor: "badge-ppwc" },
+      { id: "sub_itc",  code: "ITC",  name: "Information Theory and Coding",           classColor: "card-itc",  badgeColor: "badge-itc" },
+      { id: "sub_ips",  code: "IPS",  name: "Internet Protocols & Security",           classColor: "card-ips",  badgeColor: "badge-ips" },
+      { id: "sub_mlc",  code: "MLC",  name: "Machine Learning Concepts",               classColor: "card-mlc",  badgeColor: "badge-mlc" },
+      { id: "sub_cn",   code: "CN",   name: "Computer Networks",                       classColor: "card-cn",   badgeColor: "badge-cn" }
+    ];
+
+    const MONTH_NAMES = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const DB_KEY_USERS = "attendflow_users_v3";
+    const DB_KEY_LOGS = "attendflow_logs_v3";
+    const DB_KEY_ACTIVE = "attendflow_active_v3";
+    const DB_KEY_TT = "attendflow_tt_v3";
+    const DB_KEY_TT_IMG = "attendflow_tt_img_v3";
+
+    let selectedRole = "student";
+    let isRegisterMode = false;
+    let currentUser = JSON.parse(localStorage.getItem(DB_KEY_ACTIVE)) || null;
+
+    const initialToday = new Date();
+    let currentYear = initialToday.getFullYear();
+    let currentMonthIndex = initialToday.getMonth();
+    let pickerYear = currentYear;
+    let selectedDateString = initialToday.toISOString().split("T")[0];
+    let mediaStream = null;
+
+    function init() {
+      seedDatabase();
+      renderMonthDaysScroller(currentYear, currentMonthIndex);
+      if (currentUser) {
+        openDashboard();
+      } else {
+        showScreen("auth-screen");
+      }
+    }
+
+    function seedDatabase() {
+      let users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
+      if (!users.some(u => u.role === "student")) {
+        users.push({ name: "Rahul Sharma", email: "rahul@gmail.com", pass: "123456", role: "student" });
+        users.push({ name: "Priya Patel", email: "priya@gmail.com", pass: "123456", role: "student" });
+        users.push({ name: "Amit Kumar", email: "amit@gmail.com", pass: "123456", role: "student" });
+      }
+      if (!users.some(u => u.role === "teacher")) {
+        users.push({ 
+          name: "Prof. Sen", 
+          email: "teacher.fmi@gmail.com", 
+          pass: "123456", 
+          role: "teacher", 
+          subjectId: "sub_fmi" 
+        });
+      }
+      localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
+
+      let logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS));
+      if (!logs) {
+        const todayStr = new Date().toISOString().split("T")[0];
+        logs = {};
+        logs[todayStr] = {
+          "rahul@gmail.com": { "sub_fmi": "present" }
+        };
+        localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
+      }
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function setRole(role) {
+      selectedRole = role;
+      document.getElementById("role-btn-student").classList.toggle("active", role === "student");
+      document.getElementById("role-btn-teacher").classList.toggle("active", role === "teacher");
+      document.getElementById("teacher-subject-group").style.display = (role === "teacher") ? "flex" : "none";
+      document.getElementById("auth-submit-btn").textContent = 
+        `${isRegisterMode ? "Create" : "Sign In as"} ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+    }
+
+    function toggleAuthMode(e) {
+      e.preventDefault();
+      isRegisterMode = !isRegisterMode;
+      document.getElementById("name-input-group").style.display = isRegisterMode ? "flex" : "none";
+      document.getElementById("auth-subtitle").textContent = isRegisterMode 
+        ? "Create a new account" 
+        : "Sign in to your academic dashboard";
+      document.getElementById("auth-submit-btn").textContent = 
+        `${isRegisterMode ? "Create" : "Sign In as"} ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`;
+      document.getElementById("auth-mode-label").textContent = isRegisterMode 
+        ? "Already registered?" 
+        : "Don't have an account?";
+      document.getElementById("auth-mode-link").textContent = isRegisterMode 
+        ? "Sign In instead" 
+        : "Create an account";
+    }
+
+    document.getElementById("auth-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("user-email").value.trim().toLowerCase();
+      const pass = document.getElementById("user-password").value;
+      const assignedSub = document.getElementById("teacher-subject-select").value;
+
+      if (!email.endsWith("@gmail.com")) {
+        alert("Please use a valid @gmail.com address.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
+
+      if (isRegisterMode) {
+        const name = document.getElementById("user-name").value.trim();
+        if (!name) {
+          alert("Please enter your full name.");
+          return;
+        }
+        if (users.some(u => u.email === email && u.role === selectedRole)) {
+          alert(`An account already exists for this Gmail as a ${selectedRole}.`);
+          return;
+        }
+        const newUser = { 
+          name, 
+          email, 
+          pass, 
+          role: selectedRole,
+          subjectId: (selectedRole === "teacher") ? assignedSub : null
+        };
+        users.push(newUser);
+        localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
+        currentUser = newUser;
+        localStorage.setItem(DB_KEY_ACTIVE, JSON.stringify(newUser));
+        openDashboard();
+      } else {
+        const match = users.find(u => u.email === email && u.pass === pass && u.role === selectedRole);
+        if (match) {
+          if (match.role === "teacher" && !match.subjectId) {
+            match.subjectId = assignedSub;
+            localStorage.setItem(DB_KEY_USERS, JSON.stringify(users));
+          }
+          currentUser = match;
+          localStorage.setItem(DB_KEY_ACTIVE, JSON.stringify(match));
+          openDashboard();
+        } else {
+          alert(`Invalid credentials for ${selectedRole}.`);
+        }
+      }
+    });
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem(DB_KEY_ACTIVE);
+      showScreen("auth-screen");
+    }
+
+    function openDashboard() {
+      showScreen("main-screen");
+      document.getElementById("user-display-name").textContent = currentUser.name;
+      document.getElementById("current-role-badge").textContent = 
+        currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+
+      if (currentUser.role === "teacher") {
+        document.getElementById("student-nav-tabs").style.display = "none";
+        document.getElementById("teacher-nav-tabs").style.display = "flex";
+        switchTab("teacher-view-tab");
+        renderSubjectRestrictedTeacherPortal();
+      } else {
+        document.getElementById("student-nav-tabs").style.display = "flex";
+        document.getElementById("teacher-nav-tabs").style.display = "none";
+        switchTab("attendance-tab");
+        renderStudentCards();
+        renderTimetable();
+        loadSavedTimetablePhoto();
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-item").forEach(b => b.classList.remove("active"));
+      
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add("active");
+
+      document.querySelectorAll(".tab-item").forEach(btn => {
+        if (btn.getAttribute("onclick")?.includes(tabId)) {
+          btn.classList.add("active");
+        }
+      });
+    }
+
+    /* MONTH SELECTOR MODAL */
+    function openMonthPicker() {
+      pickerYear = currentYear;
+      renderMonthGrid();
+      document.getElementById("month-picker-modal").classList.add("show");
+    }
+
+    function closeMonthPicker() {
+      document.getElementById("month-picker-modal").classList.remove("show");
+    }
+
+    function shiftPickerYear(delta) {
+      pickerYear += delta;
+      renderMonthGrid();
+    }
+
+    function renderMonthGrid() {
+      document.getElementById("picker-year-display").textContent = pickerYear;
+      const grid = document.getElementById("months-grid-container");
+      grid.innerHTML = "";
+
+      MONTH_NAMES.forEach((mName, index) => {
+        const tile = document.createElement("div");
+        const isCurrent = (index === currentMonthIndex && pickerYear === currentYear);
+        tile.className = `month-tile ${isCurrent ? 'current-selected' : ''}`;
+        tile.textContent = mName.substring(0, 3);
+        tile.addEventListener("click", () => selectMonth(pickerYear, index));
+        grid.appendChild(tile);
+      });
+    }
+
+    function selectMonth(year, monthIdx) {
+      currentYear = year;
+      currentMonthIndex = monthIdx;
+      closeMonthPicker();
+      renderMonthDaysScroller(currentYear, currentMonthIndex);
+    }
+
+    /* MONTH-WISE SCROLLER */
+    function renderMonthDaysScroller(year, monthIndex) {
+      const track = document.getElementById("date-scroller-track");
+      track.innerHTML = "";
+
+      const shortMonth = MONTH_NAMES[monthIndex].substring(0, 3);
+      document.getElementById("cal-month-badge").textContent = `${shortMonth} ${year}`;
+
+      const totalDays = new Date(year, monthIndex + 1, 0).getDate();
+      const checkYear = parseInt(selectedDateString.split("-")[0]);
+      const checkMonth = parseInt(selectedDateString.split("-")[1]) - 1;
+
+      if (checkYear !== year || checkMonth !== monthIndex) {
+        selectedDateString = `${year}-${String(monthIndex + 1).padStart(2, '0')}-01`;
+      }
+
+      let activeCardElement = null;
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dateObj = new Date(year, monthIndex, day);
+        const dateIso = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" });
+
+        const card = document.createElement("div");
+        const isActive = (dateIso === selectedDateString);
+        card.className = `date-card ${isActive ? "active" : ""}`;
+        card.innerHTML = `
+          <div class="day-name">${dayName}</div>
+          <div class="day-num">${day}</div>
+          <div class="month-label">${shortMonth}</div>
+        `;
+
+        if (isActive) {
+          activeCardElement = card;
+          document.getElementById("selected-date-label").textContent = `${dayName}, ${day} ${shortMonth} ${year}`;
+        }
+
+        card.addEventListener("click", () => {
+          document.querySelectorAll(".date-card").forEach(c => c.classList.remove("active"));
+          card.classList.add("active");
+          selectedDateString = dateIso;
+          document.getElementById("selected-date-label").textContent = `${dayName}, ${day} ${shortMonth} ${year}`;
+          if (currentUser && currentUser.role === "student") {
+            renderStudentCards();
+          }
+        });
+
+        track.appendChild(card);
+      }
+
+      if (activeCardElement) {
+        setTimeout(() => {
+          activeCardElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 100);
+      }
+
+      if (currentUser && currentUser.role === "student") {
+        renderStudentCards();
+      }
+    }
+
+    /* STATS CALCULATION */
+    function getStudentSubjectStats(studentEmail, subjectId) {
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+      let attended = 0;
+      let held = 0;
+
+      for (const dateKey in logs) {
+        const studentLog = logs[dateKey]?.[studentEmail];
+        if (studentLog && studentLog[subjectId]) {
+          const st = studentLog[subjectId];
+          if (st === "present") {
+            attended++;
+            held++;
+          } else if (st === "absent") {
+            held++;
+          }
+        }
+      }
+
+      const pct = held > 0 ? ((attended / held) * 100).toFixed(1) : "100.0";
+      return { attended, held, pct: parseFloat(pct) };
+    }
+
+    function calculateNeededClasses(attended, total, target = 75) {
+      if (total === 0) return 0;
+      const currentPct = (attended / total) * 100;
+      if (currentPct >= target) return 0;
+      const t = target / 100;
+      return Math.ceil((t * total - attended) / (1 - t));
+    }
+
+    /* STUDENT CARDS */
+    function renderStudentCards() {
+      const container = document.getElementById("student-subjects-stack");
+      container.innerHTML = "";
+
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+      const currentDayLogs = logs[selectedDateString]?.[currentUser.email] || {};
+
+      DEFAULT_SUBJECTS.forEach(sub => {
+        const stats = getStudentSubjectStats(currentUser.email, sub.id);
+        const isBelow75 = stats.pct < 75.0 && stats.held > 0;
+        const needed = calculateNeededClasses(stats.attended, stats.held, 75);
+        const curStatus = currentDayLogs[sub.id] || null;
+
+        const card = document.createElement("div");
+        card.className = `subject-card ${sub.classColor} ${isBelow75 ? "danger-card" : ""}`;
+
+        card.innerHTML = `
+          <div class="subject-top-row">
+            <div class="subject-title-area">
+              <span class="subject-badge ${sub.badgeColor}">${sub.code}</span>
+              <span class="subject-name">${sub.name}</span>
+              ${isBelow75 ? '<span class="criteria-alert">⚠️ Below 75%</span>' : ''}
+            </div>
+            <div class="pct-box ${isBelow75 ? 'danger' : ''}">${stats.pct}%</div>
+          </div>
+
+          <div class="subject-mid-row">
+            <div>
+              Classes Attended: <span class="stat-val">${stats.attended} / ${stats.held}</span>
+            </div>
+            <div>
+              75% Requirement: 
+              ${isBelow75 
+                ? `<span class="needed-stat">Must attend next ${needed} class(es)</span>`
+                : `<span style="color: var(--success); font-weight: 600;">Criteria Met</span>`
+              }
+            </div>
+            <div class="attendance-buttons">
+              <button class="att-btn ${curStatus === 'present' ? 'active-p' : ''}" onclick="setAttendance('${sub.id}', 'present')">Present</button>
+              <button class="att-btn ${curStatus === 'absent' ? 'active-a' : ''}" onclick="setAttendance('${sub.id}', 'absent')">Absent</button>
+              <button class="att-btn ${curStatus === 'holiday' ? 'active-h' : ''}" onclick="setAttendance('${sub.id}', 'holiday')">Holiday</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setAttendance(subjectId, status) {
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+      if (!logs[selectedDateString]) logs[selectedDateString] = {};
+      if (!logs[selectedDateString][currentUser.email]) logs[selectedDateString][currentUser.email] = {};
+
+      if (logs[selectedDateString][currentUser.email][subjectId] === status) {
+        delete logs[selectedDateString][currentUser.email][subjectId];
+      } else {
+        logs[selectedDateString][currentUser.email][subjectId] = status;
+      }
+
+      localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
+      renderStudentCards();
+    }
+
+    /* =========================================================
+       TEACHER PORTAL: WITH MARK/OVERRIDE ABSENT OPTION
+    ========================================================= */
+    function renderSubjectRestrictedTeacherPortal() {
+      const assignedSubId = currentUser.subjectId || "sub_fmi";
+      const assignedSubObj = DEFAULT_SUBJECTS.find(s => s.id === assignedSubId) || DEFAULT_SUBJECTS[0];
+
+      const badge = document.getElementById("teacher-subject-pill");
+      badge.textContent = `${assignedSubObj.code} — ${assignedSubObj.name}`;
+      badge.className = `subject-badge ${assignedSubObj.badgeColor}`;
+
+      const users = JSON.parse(localStorage.getItem(DB_KEY_USERS)) || [];
+      const students = users.filter(u => u.role === "student");
+      const tbody = document.getElementById("teacher-roster-body");
+      tbody.innerHTML = "";
+
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No students enrolled yet.</td></tr>`;
+        return;
+      }
+
+      students.forEach(st => {
+        const stats = getStudentSubjectStats(st.email, assignedSubId);
+        const isBelow = stats.pct < 75.0 && stats.held > 0;
+        const needed = calculateNeededClasses(stats.attended, stats.held, 75);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${st.name}</strong></td>
+          <td>${st.email}</td>
+          <td>${stats.attended} / ${stats.held}</td>
+          <td>
+            <strong style="color: ${isBelow ? 'var(--danger)' : 'var(--success)'}">
+              ${stats.pct}%
+            </strong>
+          </td>
+          <td>
+            ${isBelow 
+              ? `<span style="color: var(--danger); font-weight: 600; font-size: 0.8rem; background: #fee2e2; padding: 3px 8px; border-radius: 4px;">Defaulter (Needs ${needed} classes)</span>` 
+              : `<span style="color: var(--success); font-weight: 600; font-size: 0.8rem; background: #dcfce7; padding: 3px 8px; border-radius: 4px;">Eligible (Safe)</span>`
+            }
+          </td>
+          <td style="text-align: center;">
+            <button class="btn-danger-outline" onclick="teacherMarkAbsent('${st.email}', '${st.name}')" title="Override false attendance">
+              ⚠️ Mark Absent
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* TEACHER ACTION: OVERRIDE FALSE ATTENDANCE TO ABSENT */
+    function teacherMarkAbsent(studentEmail, studentName) {
+      const todayStr = new Date().toISOString().split("T")[0];
+      const targetDate = prompt(
+        `Enter date to mark ${studentName} ABSENT (YYYY-MM-DD):`,
+        todayStr
+      );
+
+      if (!targetDate) return;
+
+      const assignedSubId = currentUser.subjectId || "sub_fmi";
+      const logs = JSON.parse(localStorage.getItem(DB_KEY_LOGS)) || {};
+
+      if (!logs[targetDate]) logs[targetDate] = {};
+      if (!logs[targetDate][studentEmail]) logs[targetDate][studentEmail] = {};
+
+      // Override presence/holiday with absent
+      logs[targetDate][studentEmail][assignedSubId] = "absent";
+      localStorage.setItem(DB_KEY_LOGS, JSON.stringify(logs));
+
+      alert(`Updated: ${studentName} has been marked ABSENT for ${assignedSubId.replace('sub_', '').toUpperCase()} on ${targetDate}.`);
+      renderSubjectRestrictedTeacherPortal();
+    }
+
+    /* TIMETABLE */
+    function renderTimetable() {
+      const defaults = [
+        { day: "Monday", time: "09:00 - 10:30 AM", subject: "FMI", room: "Hall A" },
+        { day: "Tuesday", time: "10:30 - 12:00 PM", subject: "DPOS", room: "Lab 3" },
+        { day: "Wednesday", time: "01:00 - 02:30 PM", subject: "PPWC", room: "Lab 1" },
+        { day: "Thursday", time: "09:00 - 10:30 AM", subject: "ITC", room: "Hall B" },
+        { day: "Friday", time: "11:00 - 12:30 PM", subject: "CN", room: "Hall C" }
+      ];
+      const data = JSON.parse(localStorage.getItem(DB_KEY_TT)) || defaults;
+      document.getElementById("timetable-body").innerHTML = data.map(item => `
+        <tr>
+          <td><strong>${item.day}</strong></td>
+          <td>${item.time}</td>
+          <td>${item.subject}</td>
+          <td>${item.room}</td>
+        </tr>
+      `).join("");
+    }
+
+    function addManualTimetableEntry() {
+      const day = prompt("Enter Day (e.g. Monday):");
+      const time = prompt("Enter Time (e.g. 10:00 - 11:30 AM):");
+      const subject = prompt("Enter Subject (FMI, DPOS, PPWC, ITC, IPS, MLC, CN):");
+      const room = prompt("Enter Room / Lab:");
+
+      if (day && time && subject) {
+        const data = JSON.parse(localStorage.getItem(DB_KEY_TT)) || [];
+        data.push({ day, time, subject, room: room || "N/A" });
+        localStorage.setItem(DB_KEY_TT, JSON.stringify(data));
+        renderTimetable();
+      }
+    }
+
+    async function startCamera() {
+      const box = document.getElementById("camera-box");
+      box.style.display = "flex";
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        document.getElementById("camera-feed").srcObject = mediaStream;
+      } catch (err) {
+        alert("Camera error: " + err.message);
+        box.style.display = "none";
+      }
+    }
+
+    function stopCamera() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
+      document.getElementById("camera-box").style.display = "none";
+    }
+
+    function captureCamera() {
+      if (!mediaStream) return;
+      const v = document.getElementById("camera-feed");
+      const c = document.getElementById("camera-canvas");
+      c.width = v.videoWidth;
+      c.height = v.videoHeight;
+      c.getContext("2d").drawImage(v, 0, 0);
+      const img = c.toDataURL("image/png");
+      localStorage.setItem(DB_KEY_TT_IMG, img);
+      loadSavedTimetablePhoto();
+      stopCamera();
+    }
+
+    function loadSavedTimetablePhoto() {
+      const img = localStorage.getItem(DB_KEY_TT_IMG);
+      const container = document.getElementById("tt-img-container");
+      if (img) {
+        document.getElementById("tt-img-preview").src = img;
+        container.style.display = "block";
+      } else {
+        container.style.display = "none";
+      }
+    }
+
+    function clearTimetablePhoto() {
+      localStorage.removeItem(DB_KEY_TT_IMG);
+      loadSavedTimetablePhoto();
+    }
+
+    /* CALCULATOR */
+    function runCalculator() {
+      const attended = parseInt(document.getElementById("calc-in-attended").value, 10);
+      const total = parseInt(document.getElementById("calc-in-total").value, 10);
+      const out = document.getElementById("calc-result");
+
+      if (isNaN(attended) || isNaN(total) || total <= 0 || attended > total) {
+        alert("Please enter valid positive numbers where attended does not exceed total classes.");
+        return;
+      }
+
+      const pct = ((attended / total) * 100).toFixed(1);
+      out.style.display = "block";
+
+      if (pct >= 75) {
+        const canSkip = Math.floor((attended / 0.75) - total);
+        out.style.background = "var(--success-bg)";
+        out.style.border = "1px solid var(--success-border)";
+        out.innerHTML = `
+          <h4 style="color: var(--success); margin-bottom: 4px;">Criteria Fulfilled (${pct}%)</h4>
+          <p>You can safely skip up to <strong>${canSkip}</strong> class(es) without falling below 75%.</p>
+        `;
+      } else {
+        const needed = calculateNeededClasses(attended, total, 75);
+        out.style.background = "var(--danger-bg)";
+        out.style.border = "1px solid var(--danger-border)";
+        out.innerHTML = `
+          <h4 style="color: var(--danger); margin-bottom: 4px;">Shortage Detected (${pct}%)</h4>
+          <p>You must attend the next <strong>${needed}</strong> consecutive class(es) to restore 75% eligibility.</p>
+        `;
+      }
+    }
+
+    window.addEventListener("click", (e) => {
+      const modal = document.getElementById("month-picker-modal");
+      if (e.target === modal) {
+        closeMonthPicker();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
